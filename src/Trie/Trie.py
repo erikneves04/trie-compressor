@@ -1,24 +1,26 @@
+# Tamanho do alfabeto utilizado (ASCII)
+SIGMA_SIZE = 127
+
 class Trie:
     def __init__(self):
-        self.root = _trieNode(None, None, None)
+        self.root = _trieNode(None)
 
-    def Insert(self, data):
+    def Insert(self, key, value):
         pass
 
-    def Search(self, data):
-        return True
+    def Search(self, key):
+        pass
 
-    def Remove(self, data):
+    def Remove(self, key):
         pass
 
 class _trieNode:
-    def __init__(self, left, right, top):
-        self.left = left
-        self.right = right
-        self.top = top
+    def __init__(self, previous, value = None):
+        self.children = [None] * SIGMA_SIZE
+        self.previous = previous
 
-        self.value = None
-        self.isLeaf = False
+        self._value = value
+        self._isLeaf = (value != None)
 
     def IsLeaf(self):
         return self.isLeaf
