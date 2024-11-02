@@ -1,9 +1,11 @@
 # Tamanho do alfabeto utilizado (ASCII)
-SIGMA_SIZE = 127
+SIGMA_SIZE = 127 # Avaliar se está correto, pode ser alterado em breve para 2 (alfabeto binário)
 
 class Trie:
     def __init__(self):
         self.root = _trieNode(None)
+        self._nodeCount = 0
+        self._depth = 1
 
     def Insert(self, key, value):
         pass
@@ -19,6 +21,12 @@ class Trie:
 
     def __setitem__(self, key, value):
         self.Insert(key, value)
+
+    def GetNodeCount(self):
+        return self._nodeCount
+    
+    def GetDepth(self):
+        return self._depth
         
 class _trieNode:
     def __init__(self, previous, value = None):
