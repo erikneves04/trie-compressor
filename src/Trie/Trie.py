@@ -26,6 +26,7 @@ class _trieNode:
         
     def GetSubstring(self):
         return self.substring
+    
 class Trie:
     def __init__(self):
         self.root = _trieNode(None)
@@ -41,11 +42,11 @@ class Trie:
             currentNode.children[bit] = _trieNode(currentNode, key, value)
             self._nodeCount += 1
             self._depth = max(self._depth, len(key) - i + 1)
-            return (True, currentNode.GetSubstring())              
+            return (True, currentNode.GetSubstring(), key)              
         
         while i < len(key):                 
-            child = currentNode.children[bit]
-            substring = child.substring
+            child: _trieNode = currentNode.children[bit]
+            substring = child.GetSubstring()
             lenSubstring = len(substring)
             
             for j in range(lenSubstring):
@@ -74,13 +75,15 @@ class Trie:
                     currentNode.children[breakbitSubstring] = _trieNode(currentNode, sufixCurrentNode, currentNode.GetValue())
                     self._nodeCount += 1
                     self._depth += 1 
-                    return (True, currentNode.GetSubstring())             
+                    return (True, currentNode.GetSubstring(), key)             
                         
             i += lenSubstring
             bit = int(key[i]) if i < len(key) else None
-            child = currentNode.children[bit]   
+            currentNode = child  
+            if currentNode[bit] is None:
+                currentNode.SetSubstring(substring + key[i:])
         
-        return (True, currentNode.GetSubstring())                
+        return (True, currentNode.GetSubstring(), key)                
         
 
     def Search(self, key):
