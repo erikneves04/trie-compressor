@@ -1,12 +1,20 @@
 class FileManager:
     @staticmethod
+    def ReadFileAsType(filePath, type):
+        with open(f"{filePath}", type) as file:
+            data = file.read()
+        return data
+    
+    @staticmethod
     def ReadFileAsBinary(filePath):
-        with open(f"{filePath}", "rb") as file:
-            byte_data = file.read()
-
-        binary_data = ''.join(format(byte, '08b') for byte in byte_data)
+        data = FileManager.ReadFileAsType(filePath, "rb")
+        binary_data = ''.join(format(byte, '08b') for byte in data)
         return binary_data
 
+    @staticmethod
+    def ReadFileAsText(filePath):
+        return FileManager.ReadFileAsType(filePath, "r")
+    
     @staticmethod
     def ConvertBinaryToString(binary):
         if not binary:
