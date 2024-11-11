@@ -1,5 +1,5 @@
-# Tamanho do alfabeto utilizado (ASCII)
-SIGMA_SIZE = 2
+SIGMA_SIZE = 3
+IS_WORD_FULL = "$"
 
 class _trieNode:
     def __init__(self, previous, substring="", value=None):
@@ -21,10 +21,11 @@ class _trieNode:
 
     def SetSubstring(self, value):
         self.substring = value
-        self._isLeaf = False
+        self._isLeaf = False if value is None else True
 
     def GetSubstring(self):
         return self.substring
+
 class Trie:
     def __init__(self):
         self.root = _trieNode(None)
@@ -32,23 +33,29 @@ class Trie:
         self._depth = 1
 
     def Insert(self, key, value):
+        if not key:
+            raise ValueError("A chave não pode ser vazia")
+        
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("O valor deve ser um inteiro maior que zero")
+        
         currentNode = self.root
         insertionDepth = 0
         
         i = 0
         bit = int(key[i])
-        
+
         if currentNode.children[bit] is None:
             currentNode.children[bit] = _trieNode(currentNode, key, value)
             currentNode = currentNode.children[bit]
             insertionDepth += 1
             self._nodeCount += 1
             self._depth = max(self._depth, insertionDepth)
-            return (True, currentNode.GetSubstring(), key, value)
+            return (key, key, None)
 
         while i < len(key):
-            childNode : _trieNode = currentNode.children[bit]
-            substring = child.GetSubstring()
+            childNode = currentNode.children[bit]
+            substring = childNode.GetSubstring()
             lenSubstring = len(substring)
 
             for j in range(lenSubstring):
@@ -59,29 +66,44 @@ class Trie:
                     
                     breakbitKey = int(key[i + j])
                     breakbitSubstring = 0 if breakbitKey == 1 else 1
-
-                    child.SetSubstring(prefixMatch)
-                    childKey = child.children[breakbitKey] = _trieNode(child, suffixNew, value)
-                    childSubsting = child.children[breakbitSubstring] = _trieNode(child, suffixExisting, child.GetValue())
+                    
+                    oldChildren = childNode.children
+                    childNode.SetSubstring(prefixMatch)
+                    childNode.children = [None] * SIGMA_SIZE
+                    
+                    newChildExisting = _trieNode(childNode, suffixExisting, childNode.GetValue())
+                    newChildExisting.children = oldChildren  
+                    childNode.children[breakbitSubstring] = newChildExisting
+                    
+                    childNode.children[breakbitKey] = _trieNode(childNode, suffixNew, value)
+                    childNode.SetValue(None)
+                    
                     insertionDepth += 1
-                    self._nodeCount += 1
+                    self._nodeCount += 2
                     self._depth = max(self._depth, insertionDepth)
                     
-                    return ("2 nós criados", childKey.GetSubstring(), childKey.GetValue(), childSubsting.GetSubstring(), childSubsting.GetValue(), key)
+                    return (key, suffixNew, suffixExisting)
 
             i += lenSubstring
             bit = int(key[i]) if i < len(key) else None
-            currentNode = child
-            insertionDepth += 1
+            if bit is not None and childNode.children[bit] is None and childNode.IsLeaf():
+                childNode.children[2] = _trieNode(currentNode, IS_WORD_FULL, childNode.GetValue())
+                childNode.children[bit] = _trieNode(currentNode, key[:i], value)
+                currentNode = childNode
+                currentNode.SetValue(None)
+                
+                return (key, IS_WORD_FULL, key[i:])
+            
+            currentNode = childNode
 
-            if currentNode[bit] is None:
-                currentNode.SetSubstring(substring + key[i:])
-        
-        return (True, currentNode.GetSubstring(), key, value)
+        return (key, currentNode.GetSubstring(), None)
 
     def Search(self, key):
-        currentNode = self.root
+        if not key:
+            raise ValueError("A chave não pode ser vazia")
         
+        currentNode = self.root
+
         i = 0
         bit = int(key[i])
         if currentNode.children[bit] is None:
@@ -89,8 +111,10 @@ class Trie:
 
         while i < len(key):
             child = currentNode.children[bit]
+            prefix = ""
             substring = child.substring
             lenSubstring = len(substring)
+            prefix += substring
 
             for j in range(lenSubstring):
                 if i + j >= len(key) or key[i + j] != substring[j]:
@@ -106,7 +130,8 @@ class Trie:
             currentNode = child
 
         result = currentNode.GetValue() if currentNode.IsLeaf() else None
-        return result
+        sufix = currentNode.GetSubstring()
+        return (prefix, sufix, result)
 
     def Remove(self, key):
         pass
