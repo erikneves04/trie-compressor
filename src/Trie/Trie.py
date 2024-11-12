@@ -62,19 +62,25 @@ class Trie:
                 if i + j >= len(key) or key[i + j] != substring[j]:
                     prefixMatch = substring[:j]
                     suffixExisting = substring[j:]
-                    suffixNew = key[i+j:]
-                    
+                    suffixNew = key[i + j:]
+
                     breakbitKey = int(key[i + j])
                     breakbitSubstring = 0 if breakbitKey == 1 else 1
                     
-                    oldChildren = childNode.children
+                    child_2_reference = childNode.children[2]
+                    oldChildren = childNode.children                    
                     childNode.SetSubstring(prefixMatch)
                     childNode.children = [None] * SIGMA_SIZE
-                    
+
                     newChildExisting = _trieNode(childNode, suffixExisting, childNode.GetValue())
                     newChildExisting.children = oldChildren  
                     childNode.children[breakbitSubstring] = newChildExisting
-                    
+
+                    if child_2_reference is not None:
+                        newChildExisting.children[2] = child_2_reference
+                        # print(f"Entra")
+                        newChildExisting.children[2] = childNode.children[2] 
+
                     childNode.children[breakbitKey] = _trieNode(childNode, suffixNew, value)
                     childNode.SetValue(None)
                     
@@ -89,6 +95,7 @@ class Trie:
             if bit is not None and childNode.children[bit] is None and childNode.IsLeaf():
                 childNode.children[2] = _trieNode(currentNode, IS_WORD_FULL, childNode.GetValue())
                 childNode.children[bit] = _trieNode(currentNode, key[:i], value)
+                # print(f"CIFRAO")
                 currentNode = childNode
                 currentNode.SetValue(None)
                 
@@ -103,35 +110,43 @@ class Trie:
             raise ValueError("A chave não pode ser vazia")
         
         currentNode = self.root
+        # print(f"Buscando a chave: {key}")
 
         i = 0
         bit = int(key[i])
         if currentNode.children[bit] is None:
+            # print(f"Chave {key} não encontrada na raiz.")
             return None
 
+        searchkey = ""
         while i < len(key):
-            child = currentNode.children[bit]
-            prefix = ""
-            substring = child.substring
-            lenSubstring = len(substring)
-            prefix += substring
+        #   print(len(key))
+          child: _trieNode = currentNode.children[bit]
+          substring = child.substring
+          lenSubstring = len(substring)
+        #   print(f"Substrings verificando: {substring}, comprimento: {lenSubstring}, i: {i}")
 
-            for j in range(lenSubstring):
-                if i + j >= len(key) or key[i + j] != substring[j]:
-                    breakbit = int(key[i + j])
-                    
-                    if currentNode.children[breakbit] is None:
-                        return None
-                    else:
-                        child = currentNode.children[breakbit]
+          for j in range(lenSubstring):
+            # print(f"Searchkey: {searchkey}")
+            # print(f"Verificando posição i+j={i+j} da chave e j={j} da substring.")
+            if i + j >= len(key):
+                return (searchkey, child.GetSubstring()) 
+            
+            if key[i + j] != substring[j]:
+                return None            
+            searchkey += substring[j]
+          i += lenSubstring
+          bit = int(key[i]) if i < len(key) else None
+          direction = "esquerda" if bit == 0 else "direita"
+        #   print(f"Descendo para o próximo nó à {direction} com bit: {bit}, i: {i}")
+          currentNode = child
 
-            i += lenSubstring
-            bit = int(key[i]) if i < len(key) else None
-            currentNode = child
-
-        result = currentNode.GetValue() if currentNode.IsLeaf() else None
-        sufix = currentNode.GetSubstring()
-        return (prefix, sufix, result)
+        if currentNode.children[2] is None:
+            sufix = currentNode.GetSubstring()
+        else:
+            currentNode = currentNode.children[2]
+            sufix = currentNode.GetSubstring()
+        return (searchkey, sufix)
 
     def Remove(self, key):
         pass
