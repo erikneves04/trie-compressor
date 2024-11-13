@@ -24,17 +24,17 @@ def list_of_insertion():
 @pytest.fixture(scope="function")
 def expected_values_insertion():
     return [
-        ("01001000", "01001000", None),
-        ("01100101", "100101", "001000"),
-        ("01101100", "1100", "0101"),
-        ("01101100", "1100", None),
-        ("01101111", "11", "00"),
-        ("00100000", "0100000", "1"),
-        ("01010111", "10111", "01000"),
-        ("01101111", "11", None),
-        ("01110010", "10010", "0"),
-        ("01100100", "0", "1"),
-        ("00100001", "1", "0")
+        ("01001000", "01001000", None, 1),
+        ("01100101", "100101", "001000", 2),
+        ("01101100", "1100", "0101", 3),
+        ("01101100", "1100", None, 4),
+        ("01101111", "11", "00", 5),
+        ("00100000", "0100000", "1", 6),
+        ("01010111", "10111", "01000", 7),
+        ("01101111", "11", None, 8),
+        ("01110010", "10010", "0", 9),
+        ("01100100", "0", "1", 10),
+        ("00100001", "1", "0", 11)
     ]   
     
 @pytest.fixture(scope="function")
@@ -61,55 +61,55 @@ def test_trie_empty_has_depth_one(trie):
 
 @pytest.mark.parametrize(
     "key, value, expected", 
-    [("000", 1, ("000", "000", None)),
-     ("111", 1, ("111", "111", None)),
+    [("000", 1, ("000", "000", None, 1)),
+     ("111", 1, ("111", "111", None, 1)),
 ])
 def test_trie_insert_str_bin_trivial_case(trie, key, value, expected):
-    result = trie.Insert(key, value)
+    result = trie.Insert(key, value, True)
     assert result == expected
 
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected",
-    [("000", 1, "111", 2, ("111", "111", None)),
+    [("000", 1, "111", 2, ("111", "111", None, 2)),
 ])
 def test_trie_insert_two_str_bin_with_different_prefixes(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
-    result = trie.Insert(second_key, second_value)
+    result = trie.Insert(second_key, second_value, True)
     assert result == expected
 
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected", 
-    [("00000", 1, "00011", 2, ("00011", "11", "00")),
-     ("101", 1, "100", 2, ("100", "0", "1")),
-     ("110", 1, "111", 2, ("111", "1", "0")),
-     ("0110", 1, "0111", 2, ("0111", "1", "0")),
-     ("1110", 1, "1111", 2, ("1111", "1", "0")),
-     ("00001", 1, "00000", 2, ("00000", "0", "1")),
+    [("00000", 1, "00011", 2, ("00011", "11", "00", 2)),
+     ("101", 1, "100", 2, ("100", "0", "1", 2)),
+     ("110", 1, "111", 2, ("111", "1", "0", 2)),
+     ("0110", 1, "0111", 2, ("0111", "1", "0", 2)),
+     ("1110", 1, "1111", 2, ("1111", "1", "0", 2)),
+     ("00001", 1, "00000", 2, ("00000", "0", "1", 2)),
 ])
 def test_trie_insert_two_str_bin_with_common_prefix(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
-    result = trie.Insert(second_key, second_value)
+    result = trie.Insert(second_key, second_value, True)
     assert result == expected
    
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected", 
-    [("111", 1, "11101", 2, ("11101", "$", "01")),
-     ("101", 1, "10111", 2, ("10111", "$", "11")),
-     ("110", 1, "11010", 2, ("11010", "$", "10")),
-     ("0110", 1, "011011", 2, ("011011", "$", "11")),
-     ("000", 1, "0001", 2, ("0001", "$", "1")),
-     ("1010", 1, "10101", 2, ("10101", "$", "1")),
-     ("1110", 1, "11101", 2, ("11101", "$", "1")),
-     ("1001", 1, "100111", 2, ("100111", "$", "11")),
+    [("111", 1, "11101", 2, ("11101", "$", "01", 2)),
+     ("101", 1, "10111", 2, ("10111", "$", "11", 2)),
+     ("110", 1, "11010", 2, ("11010", "$", "10", 2)),
+     ("0110", 1, "011011", 2, ("011011", "$", "11", 2)),
+     ("000", 1, "0001", 2, ("0001", "$", "1", 2)),
+     ("1010", 1, "10101", 2, ("10101", "$", "1", 2)),
+     ("1110", 1, "11101", 2, ("11101", "$", "1", 2)),
+     ("1001", 1, "100111", 2, ("100111", "$", "11", 2)),
 ])   
 def test_trie_insert_str_bin_into_leaf_node(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
-    result = trie.Insert(second_key, second_value)
+    result = trie.Insert(second_key, second_value, True)
     assert result == expected
 
 def test_trie_insert_random_list_str_bin(trie, list_of_insertion, expected_values_insertion):
     for (key, value), expected in zip(list_of_insertion, expected_values_insertion):
-        result = trie.Insert(key, value)
+        result = trie.Insert(key, value, True)
         assert result == expected
 
     assert trie.GetNodeCount() == 18
@@ -117,8 +117,8 @@ def test_trie_insert_random_list_str_bin(trie, list_of_insertion, expected_value
 def test_trie_spli_intermediate_node_leaf(trie):
     trie.Insert("111",1)
     trie.Insert("1110",2)
-    result = trie.Insert("110",3)
-    assert result == ("110", "0", "1") 
+    result = trie.Insert("110",3, True)
+    assert result == ("110", "0", "1", 3) 
     
     
 def test_trie_insert_string_void(trie):
@@ -143,7 +143,7 @@ def test_trie_insert_value_not_positive(trie):
 ])    
 def test_trie_search_trivial_case(trie, key, value, expected):
     trie.Insert(key, value)
-    search = trie.Search(key)
+    search = trie.Search(key, True)
     assert search == expected
     
 @pytest.mark.parametrize(
@@ -153,7 +153,7 @@ def test_trie_search_trivial_case(trie, key, value, expected):
 def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
-    search = trie.Search(second_key)
+    search = trie.Search(second_key, True)
     assert search == expected
     
 @pytest.mark.parametrize(
@@ -167,8 +167,8 @@ def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, f
 def test_trie_search_with_two_str_bin_with_common_prefix(trie, first_key, first_value, second_key, second_value, expected1, expected2):
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
-    result1 = trie.Search(first_key)
-    result2 = trie.Search(second_key)
+    result1 = trie.Search(first_key, True)
+    result2 = trie.Search(second_key, True)
     assert (result1, result2) == (expected1, expected2)
     
 @pytest.mark.parametrize(
@@ -185,7 +185,7 @@ def test_trie_search_with_two_str_bin_with_common_prefix(trie, first_key, first_
 def test_trie_search_with_str_bin_into_leaf_node(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
-    search = trie.Search(first_key)
+    search = trie.Search(first_key, True)
     assert search == expected
     
 def test_trie_search_random_list_str_bin(trie, list_of_insertion, expected_values_search):
@@ -193,7 +193,7 @@ def test_trie_search_random_list_str_bin(trie, list_of_insertion, expected_value
         trie.Insert(key, value)
         
     for (key, value),  expected in zip(list_of_insertion, expected_values_search):
-        result = trie.Search(key)
+        result = trie.Search(key, True)
         assert result == expected
  
 @pytest.mark.parametrize(
@@ -209,29 +209,13 @@ def test_trie_search_str_bin_not_exist(trie, list_of_insertion, non_existing_key
     for key, value in list_of_insertion:
         trie.Insert(key, value)
     
-    result = trie.Search(non_existing_key)
-    assert result == None
- 
-@pytest.mark.parametrize(
-    "partialkey, sufixCurrenteNode",
-    [("00100", "010000"),
-     ("01001", "01000"),
-     ("01100", "010"),
-     ("011100", "10010"),
-     ("01101", "11")
-    ]
-)    
-def test_trie_search_str_bin_partial(trie, list_of_insertion, partialkey, sufixCurrenteNode):
-    for key, value in list_of_insertion:
-        trie.Insert(key, value)
-    
-    result = trie.Search(partialkey)
-    assert result == (partialkey, sufixCurrenteNode)
-            
+    result = trie.Search(non_existing_key, True)
+    assert result == False
+             
 def test_trie_search_without_children_root(trie):
     trie.Insert("111", 1)
-    result = trie.Search("011")
-    assert result == None
+    result = trie.Search("011", True)
+    assert result == False
 
 def test_trie_search_string_void(trie):
     with pytest.raises(ValueError):
