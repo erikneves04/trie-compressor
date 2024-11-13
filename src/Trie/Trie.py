@@ -25,18 +25,28 @@ class _trieNode:
 
     def GetSubstring(self):
         return self.substring
+
 class Trie:
-    def __init__(self):
+    def __init__(self, detailedReturn = False):
         self.root = _trieNode(None)
         self._nodeCount = 1
         self._depth = 1
-
-    def Insert(self, key, value, detailed_return=False):
-        if not key:
-            raise ValueError("A chave não pode ser vazia")
+        self.detailedReturn = detailedReturn  
         
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("O valor deve ser um inteiro maior que zero")
+    def GetDetailedReturn(self):
+        return self.detailedReturn
+
+    def Insert(self, key, value):
+        if not key:
+            raise ValueError("The key cannot be empty")
+        
+        if not isinstance(value, int):
+            raise ValueError("The value must be an integer.")
+        
+        if value < 0:
+            raise ValueError("The value cannot be negative.")
+        
+        detailedReturn = self.GetDetailedReturn()
         
         currentNode = self.root
         insertionDepth = 0
@@ -49,7 +59,7 @@ class Trie:
             insertionDepth += 1
             self._nodeCount += 1
             self._depth = max(self._depth, insertionDepth)
-            return (currentNode.GetSubstring(), currentNode.GetValue()) if not detailed_return else (key, key, None, value)
+            return (currentNode.GetSubstring(), currentNode.GetValue()) if not detailedReturn else (key, key, None, value)
 
         while i < len(key):
             childNode = currentNode.children[bit]
@@ -65,17 +75,17 @@ class Trie:
                     breakbitKey = int(key[i + j])
                     breakbitSubstring = 0 if breakbitKey == 1 else 1
 
-                    child_2_reference = childNode.children[2]
+                    extraReference  = childNode.children[SIGMA_SIZE]
                     oldChildren = childNode.children                    
                     childNode.SetSubstring(prefixMatch)
-                    childNode.children = [None] * SIGMA_SIZE
+                    childNode.children = [None] * (SIGMA_SIZE + 1)
 
                     newChildExisting = _trieNode(childNode, suffixExisting, childNode.GetValue())
                     newChildExisting.children = oldChildren  
                     childNode.children[breakbitSubstring] = newChildExisting
 
-                    if child_2_reference is not None:
-                        newChildExisting.children[2] = child_2_reference
+                    if extraReference  is not None:
+                        newChildExisting.children[SIGMA_SIZE] = extraReference 
 
                     newChildNode = _trieNode(childNode, suffixNew, value)
                     childNode.children[breakbitKey] = newChildNode
@@ -85,7 +95,7 @@ class Trie:
                     self._nodeCount += 2
                     self._depth = max(self._depth, insertionDepth)
 
-                    return (key, value) if not detailed_return else (key, suffixNew, suffixExisting, newChildNode.GetValue())
+                    return (key, value) if not detailedReturn else (key, suffixNew, suffixExisting, newChildNode.GetValue())
 
             i += lenSubstring
             bit = int(key[i]) if i < len(key) else None
@@ -95,16 +105,17 @@ class Trie:
                 childNode.children[bit] = _trieNode(currentNode, key[i:], value)
                 currentNode: _trieNode = childNode.children[bit]
 
-                return (key, value) if not detailed_return else (key, IS_WORD_FULL, currentNode.GetSubstring(), currentNode.GetValue())
+                return (key, value) if not detailedReturn else (key, IS_WORD_FULL, currentNode.GetSubstring(), currentNode.GetValue())
             
             currentNode = childNode
 
-        return (key, value) if not detailed_return else (key, currentNode.GetSubstring(), None, value)
+        return (key, value) if not detailedReturn else (key, currentNode.GetSubstring(), None, value)
 
-
-    def Search(self, key, detailed_return=False):
+    def Search(self, key):
         if not key:
-            raise ValueError("A chave não pode ser vazia")
+            raise ValueError("The key cannot be empty")
+        
+        detailedReturn = self.GetDetailedReturn()
         
         currentNode = self.root
         i = 0
@@ -123,10 +134,7 @@ class Trie:
             lenSubstring = len(substring)
 
             for j in range(lenSubstring):
-                if i + j >= len(key):
-                    return (searchkey, substring) if detailed_return else True
-                    
-                if key[i + j] != substring[j]:
+                if i + j >= len(key) or key[i + j] != substring[j]:
                     return False
                 
                 searchkey += substring[j]
@@ -138,13 +146,13 @@ class Trie:
             else:
                 return None
 
-        if currentNode.children[2] is None:
+        if currentNode.children[SIGMA_SIZE] is None:
             suffix = currentNode.GetSubstring()
         else:
             currentNode = currentNode.children[2]
             suffix = currentNode.GetSubstring()
         
-        return (searchkey, suffix) if detailed_return else True
+        return (searchkey, suffix) if detailedReturn else True
 
     def Remove(self, key):
         pass
