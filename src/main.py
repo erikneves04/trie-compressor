@@ -4,7 +4,7 @@ from LZW.Compressor import LZWCompressor
 from FileManager.FileManager import FileManager
 
 # Constantes
-SIGMA_SIZE = 2                  # Tamanho do alfabeto utilizado
+SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
 DEFAULT_BITS = 12               # Tamanho padrão dos códigos
 DINAMIC_BIT_SIZE_START_WITH = 9 # Tamanho inicial dos códigos no caso de número incrementável de bits
 
@@ -27,7 +27,7 @@ def parseArgs():
     return parser.parse_args()
 
 def ExecuteCompressOperation(origin, destiny, maxBits):
-    content = FileManager.ReadFileAsBinary(origin)
+    content = FileManager.ReadFileAsText(origin)
     
     compressor = LZWCompressor(SIGMA_SIZE, DEFAULT_BITS, DEFAULT_BITS) # Alterar o segundo parâmetro para definir o ponto de começo do número de bits
     compressedContent = compressor.Compress(content)
