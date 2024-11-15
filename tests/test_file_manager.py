@@ -1,5 +1,5 @@
 import os
-import pytest
+import pytest # type: ignore
 from FileManager.FileManager import FileManager
 from helpers.file_manager_helpers import create_temp_file, remove_temp_file
 
@@ -16,38 +16,52 @@ def test_read_file_as_binary():
 
     assert content_read == CONTENT_BITS
 
+def test_read_file_as_text():
+    file_name = 'content.txt'
+    create_temp_file (CONTENT, file_name)
+
+    content_read = FileManager.ReadFileAsText(file_name)
+    remove_temp_file(file_name)
+
+    assert content_read == CONTENT
+
 def test_read_file_as_binary_file_not_found():
     with pytest.raises(FileNotFoundError):
-        FileManager.ReadFileAsBinary('any.txt')
+        FileManager.ReadFileAsBinary('any.zip')
 
-def test_convert_binary_to_string():
-    converted = FileManager.ConvertBinaryToString(CONTENT_BITS)
-    assert converted == CONTENT
-
-def test_convert_string_to_binary():
-    converted = FileManager.ConvertBinaryToString(CONTENT_BITS)
-    assert converted == CONTENT
-
-def test_convert_none_binary_returns_empty():
-    converted = FileManager.ConvertBinaryToString(None)
-    assert converted == ""
+def test_read_file_as_text_file_not_found():
+    with pytest.raises(FileNotFoundError):
+        FileManager.ReadFileAsText('any.txt')
 
 def test_save_file_creates_file():
     file_name = 'content.txt'
-    FileManager.SaveFile(file_name, CONTENT_BITS)
+    FileManager.SaveTextFile(file_name, CONTENT_BITS)
 
     assert os.path.exists(file_name)
     remove_temp_file(file_name)
 
-def test_saved_file_has_right_content():
-    file_name = 'content.bin'
-    FileManager.SaveFile(file_name, CONTENT_BITS)
+def test_saved_binary_file_has_right_content():
+    file_name = 'content.zip'
+    FileManager.SaveBinaryFile(file_name, CONTENT_BITS)
     
-    content = FileManager.ReadFileAsText(file_name)
+    content = FileManager.ReadFileAsBinary(file_name)
     remove_temp_file(file_name)
 
     assert content == CONTENT_BITS
 
-def test_save_empty_file():
+def test_saved_text_file_has_right_content():
+    file_name = 'content.txt'
+    FileManager.SaveTextFile(file_name, CONTENT)
+    
+    content = FileManager.ReadFileAsText(file_name)
+    remove_temp_file(file_name)
+
+    assert content == CONTENT
+
+def test_save_text_empty_file():
     with pytest.raises(Exception):
-        FileManager.SaveFile(None, None)
+        FileManager.SaveTextFile(None, None)
+
+def test_save_binary_text_empty_file():
+    with pytest.raises(Exception):
+        FileManager.SaveBinaryFile(None, None)
