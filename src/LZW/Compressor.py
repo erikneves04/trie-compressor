@@ -15,13 +15,15 @@ class LZWCompressor:
             self.dict[bin_key] = index
 
     def Compress(self, content):
-        compressedcontent = []
+        compressedList = []
 
         prefix = ""
         biggestCode = self.sigmaSize
         #currentBits = self.initialBitsSize
         #maxIntegerForCurrentBits = (2 ** currentBits) - 1
         
+        maxCode = (1 << self.initialBitsSize) - 1
+
         for char in content:
             prefix_with_char = prefix + char
 
@@ -31,20 +33,30 @@ class LZWCompressor:
             if self.dict.ContainsKey(prefix_with_char_key):
                 prefix = prefix_with_char
             else:
-                value = BinaryConversor.ConvertIntegerToBinaryString(self.dict[prefix_key], 12)
-                compressedcontent.append(value)
+                #value = BinaryConversor.ConvertIntegerToBinaryString(, 12)
+                compressedList.append(self.dict[prefix_key])
 
                 #if self.incrementableBits and maxIntegerForCurrentBits == biggestCode:
                 #    currentBits += 1
                 #    maxIntegerForCurrentBits = (2 ** currentBits) - 1
 
-                self.dict[prefix_with_char_key] = biggestCode
-                biggestCode += 1
+                # Verificamos se existem bits restantes para o acrescimo de códigos
+                if biggestCode < maxCode:
+                    self.dict[prefix_with_char_key] = biggestCode
+                    biggestCode += 1
 
                 prefix = char
             
         if prefix:
-            value = BinaryConversor.ConvertIntegerToBinaryString(self.dict[prefix_key], 12)
-            compressedcontent.append(value)
+            compressedList.append(self.dict[prefix_key])
 
-        return ''.join(compressedcontent)
+        minCodeLenght = biggestCode.bit_length()
+        print (minCodeLenght)
+        print (biggestCode)
+        compressedContent = ""
+
+        for code in compressedList:
+            converted = BinaryConversor.ConvertIntegerToBinaryString(code, minCodeLenght)
+            compressedContent += converted
+            
+        return compressedContent
