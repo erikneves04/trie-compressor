@@ -26,5 +26,6 @@ class FileManager:
 
     @staticmethod
     def SaveFile(filePath, content):
-        with open(f"{filePath}", "w") as file:
-            file.write(content)
+        byte_content = int(content, 2).to_bytes((len(content) + 7) // 8, byteorder='big')
+        with open(f"{filePath}", "wb") as file:
+            file.write(byte_content)

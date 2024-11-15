@@ -12,17 +12,21 @@ class LZWCompressor:
         for index in range(sigmaSize):
             self.dict[chr(index)] = index
 
-    def __convertIntegerToBinaryString(self, integer, size):
+    def __convertIntegerToBinaryString(self, integer, size = 0):
         binary_str = bin(integer)[2:]
-        return binary_str.zfill(size)
+
+        if size != 0:
+            binary_str = binary_str.zfill(size)
+        
+        return binary_str
 
     def Compress(self, content):
-        compressedcontent = ""
+        compressedcontent = []
 
-        prefix = ''
-        biggestCode = self.sigmaSize - 1
-        currentBits = self.initialBitsSize
-        maxIntegerForCurrentBits = (2 ** currentBits) - 1
+        prefix = ""
+        biggestCode = self.sigmaSize
+        #currentBits = self.initialBitsSize
+        #maxIntegerForCurrentBits = (2 ** currentBits) - 1
 
         for char in content:
             prefix_with_char = prefix + char
@@ -30,22 +34,20 @@ class LZWCompressor:
             if self.dict.ContainsKey(prefix_with_char):
                 prefix = prefix_with_char
             else:
-                value = self.dict[prefix]
-                if value:
-                    compressedcontent += self.__convertIntegerToBinaryString(value, 12)
+                value = self.__convertIntegerToBinaryString(self.dict[prefix], 12)
+                compressedcontent.append(value)
 
-                if maxIntegerForCurrentBits == biggestCode and self.incrementableBits:
-                    currentBits += 1
-                    maxIntegerForCurrentBits = (2 ** currentBits) - 1
+                #if self.incrementableBits and maxIntegerForCurrentBits == biggestCode:
+                #    currentBits += 1
+                #    maxIntegerForCurrentBits = (2 ** currentBits) - 1
 
-                biggestCode += 1
                 self.dict[prefix_with_char] = biggestCode
+                biggestCode += 1
 
                 prefix = char
             
-        value = self.dict[prefix]
-        if value:
-            compressedcontent += self.__convertIntegerToBinaryString(value, 12)
+        if prefix:
+            value = self.__convertIntegerToBinaryString(self.dict[prefix], 12)
+            compressedcontent.append(value)
 
-        return compressedcontent.strip()
-        
+        return ''.join(compressedcontent)
