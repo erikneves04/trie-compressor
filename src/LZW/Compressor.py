@@ -51,8 +51,6 @@ class LZWCompressor:
             compressedList.append(self.dict[prefix_key])
 
         minCodeLenght = biggestCode.bit_length()
-        print (minCodeLenght)
-        print (biggestCode)
         compressedContent = ""
 
         for code in compressedList:
