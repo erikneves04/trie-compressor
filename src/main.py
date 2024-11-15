@@ -7,6 +7,7 @@ from FileManager.FileManager import FileManager
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
 DEFAULT_BITS = 12               # Tamanho padrão dos códigos
 DINAMIC_BIT_SIZE_START_WITH = 9 # Tamanho inicial dos códigos no caso de número incrementável de bits
+CODE_CONTROL_BITS = 32          # Tamanho da código de controle incluido no começo do arquivo comprimido, usado na descompressão
 
 # Operações disponíveis
 class Operation(Enum):
@@ -30,12 +31,12 @@ def parseArgs():
 def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
     content = FileManager.ReadFile(origin)
     
-    compressor = LZWCompressor(SIGMA_SIZE, initialCodeLengh, maxCodeLenght, dynamic)
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
     compressedContent = compressor.Compress(content)
     
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
-def ExecuteDecompressOperation(origin, destiny, maxBits):
+def ExecuteDecompressOperation(origin, destiny):
     content = FileManager.ReadFile(origin)
     pass
 
@@ -50,7 +51,7 @@ def main():
         ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True)
 
     elif args.operation == Operation.DECOMPRESS:
-        ExecuteDecompressOperation(args.origin, args.destiny, args.max_code_bits)
+        ExecuteDecompressOperation(args.origin, args.destiny)
 
     else:
         print ("Invalid operation selected.")

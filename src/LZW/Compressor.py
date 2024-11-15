@@ -2,9 +2,10 @@ from BinaryConversor.BinaryConversor import BinaryConversor
 from Trie.Trie import Trie
 
 class LZWCompressor:
-    def __init__(self, sigmaSize, initialBitsSize, maxCodeBits, incrementableBits = False):
+    def __init__(self, sigmaSize, controlBits, initialBitsSize, maxCodeBits, incrementableBits = False):
         self.dict = Trie()
         self.sigmaSize = sigmaSize
+        self.controlBits = controlBits
         self.initialBitsSize = initialBitsSize
         self.maxCodeBits = maxCodeBits
         self.incrementableBits = incrementableBits
@@ -48,10 +49,8 @@ class LZWCompressor:
         if self.prefix:
             prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
             compressedList.append(self.dict[prefix_key])
-
-        compressedContent = self.__convertCodesToBinaryString(compressedList)
         
-        return compressedContent
+        return self.__convertCodesToBinaryString(compressedList)
 
     def __insertNewCode(self, prefix_with_char_key):
         if self.biggestCode < self.maxCode:
@@ -60,10 +59,21 @@ class LZWCompressor:
 
     def __convertCodesToBinaryString(self, compressedList):
         minCodeLenght = self.biggestCode.bit_length()
-        compressedContent = ""
+        controlString = BinaryConversor.ConvertIntegerToBinaryString(minCodeLenght, self.controlBits)
+        print (minCodeLenght)
+        compressedContent = controlString
 
         for code in compressedList:
             converted = BinaryConversor.ConvertIntegerToBinaryString(code, minCodeLenght)
             compressedContent += converted
             
         return compressedContent
+    
+    @staticmethod
+    def ExtractCodeLenghtAndContent(input, controlBits):
+        code_length_bits = input[:controlBits]
+        code_length = int(code_length_bits, 2)
+
+        content = input[controlBits:]
+
+        return code_length, content
