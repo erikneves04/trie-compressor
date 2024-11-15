@@ -36,3 +36,7 @@ def test_convert_none_binary_returns_empty():
 def test_convert_empty_binary_returns_empty():
     converted = BinaryConversor.ConvertBinaryToString("")
     assert converted == ""
+
+def test_convert_exclamation_prefix_to_binary():
+    converted = BinaryConversor.ConvertPrefixToBinaryString("!")
+    assert converted == '100001'
