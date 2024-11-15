@@ -32,7 +32,7 @@ def ExecuteCompressOperation(origin, destiny, maxBits):
     compressor = LZWCompressor(SIGMA_SIZE, DEFAULT_BITS, DEFAULT_BITS) # Alterar o segundo parâmetro para definir o ponto de começo do número de bits
     compressedContent = compressor.Compress(content)
     
-    FileManager.SaveFile(destiny, compressedContent)
+    FileManager.SaveBinaryFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny, maxBits):
     content = FileManager.ReadFileAsText(origin)
