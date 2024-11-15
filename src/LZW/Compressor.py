@@ -30,7 +30,7 @@ class LZWCompressor:
             prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
             prefix_with_char_key = BinaryConversor.ConvertPrefixToBinaryString(prefix_with_char)
 
-            if self.dict.ContainsKey(prefix_with_char_key):
+            if self.dict.Search(prefix_with_char_key) == True:
                 self.prefix = prefix_with_char
             else:
                 if self.dict[prefix_key] == None:

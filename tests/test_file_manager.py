@@ -1,8 +1,7 @@
 import os
 import pytest # type: ignore
 from FileManager.FileManager import FileManager
-from helpers.file_manager_helpers import create_temp_file, remove_temp_file
-
+from tests.helpers.file_manager_helpers import create_temp_file, remove_temp_file
 
 # Variáveis para testes
 CONTENT = "Em Algoritmos II, falhar nos testes não é o fim — é apenas uma oportunidade para otimizar o código e melhorar a complexidade!"
