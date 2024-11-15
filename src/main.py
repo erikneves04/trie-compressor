@@ -37,7 +37,9 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny):
-    content = FileManager.ReadFile(origin)
+    raw_content = FileManager.ReadFile(origin)
+    maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
+
     pass
 
 def main():
