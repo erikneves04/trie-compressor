@@ -1,7 +1,7 @@
 class FileManager:
     @staticmethod
     def ReadFileAsType(filePath, type):
-        with open(f"{filePath}", type) as file:
+        with open(f"{filePath}", type, encoding="utf-8") as file:
             data = file.read()
         return data
     

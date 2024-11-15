@@ -34,6 +34,10 @@ class LZWCompressor:
                 prefix = prefix_with_char
             else:
                 #value = BinaryConversor.ConvertIntegerToBinaryString(, 12)
+                if self.dict[prefix_key] == None and biggestCode < maxCode:
+                    self.dict[prefix_key] = biggestCode
+                    biggestCode += 1
+
                 compressedList.append(self.dict[prefix_key])
 
                 #if self.incrementableBits and maxIntegerForCurrentBits == biggestCode:
@@ -48,6 +52,7 @@ class LZWCompressor:
                 prefix = char
             
         if prefix:
+            prefix_key = BinaryConversor.ConvertPrefixToBinaryString(prefix)
             compressedList.append(self.dict[prefix_key])
 
         minCodeLenght = biggestCode.bit_length()
