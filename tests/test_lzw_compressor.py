@@ -1,3 +1,4 @@
+from FileManager.FileManager import FileManager
 import pytest # type: ignore
 from LZW.Compressor import LZWCompressor
 
@@ -6,6 +7,7 @@ SIGMA_SIZE = 256
 DEFAULT_CODE_BITS = 12
 INITIAL_BITS_SIZE = 9
 CODE_CONTROL_BITS = 32
+MAX_DYNAMIC_BITS = 16
 
 def test_compressing_with_fixed_size():
     compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, DEFAULT_CODE_BITS)
@@ -58,3 +60,25 @@ def test_extract_code_control_bits_compressing():
     code_control_bits, _ = LZWCompressor.ExtractCodeLenghtAndContent(result, CODE_CONTROL_BITS)
     assert code_control_bits == 9
 
+def test_compressing_dynamic_code_lenght_set_right_code_lenght_16_bits():
+    content = FileManager.ReadFile('tests/files/dynamic_input_16_bits.txt')
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, MAX_DYNAMIC_BITS, incrementableBits=True)
+    result = compressor.Compress(content)
+    code_control_bits, _ = LZWCompressor.ExtractCodeLenghtAndContent(result, CODE_CONTROL_BITS)
+    assert code_control_bits == 16
+
+def test_compressing_dynamic_code_lenght_set_right_code_lenght_14_bits():
+    content = FileManager.ReadFile('tests/files/dynamic_input_14_bits.txt')
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, MAX_DYNAMIC_BITS, incrementableBits=True)
+    result = compressor.Compress(content)
+    code_control_bits, _ = LZWCompressor.ExtractCodeLenghtAndContent(result, CODE_CONTROL_BITS)
+    assert code_control_bits == 14
+
+def test_compressing_dynamic_return_a_valid_content():
+    content = FileManager.ReadFile('tests/files/dynamic_validation_input.txt')
+    expected = FileManager.ReadFile('tests/files/dynamic_validation_result.txt')
+
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, MAX_DYNAMIC_BITS, incrementableBits=True)
+    result = compressor.Compress(content)
+
+    assert result == expected

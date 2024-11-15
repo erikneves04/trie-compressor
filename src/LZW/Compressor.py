@@ -20,10 +20,9 @@ class LZWCompressor:
 
         self.prefix = ""
         self.biggestCode = self.sigmaSize
-        #currentBits = self.initialBitsSize
-        #maxIntegerForCurrentBits = (2 ** currentBits) - 1
-        
-        self.maxCode = (1 << self.initialBitsSize) - 1
+
+        self.currentBits = self.initialBitsSize
+        self.maxCode = (1 << self.currentBits) - 1
 
         for char in content:
             prefix_with_char = self.prefix + char
@@ -39,10 +38,6 @@ class LZWCompressor:
 
                 compressedList.append(self.dict[prefix_key])
 
-                #if self.incrementableBits and maxIntegerForCurrentBits == biggestCode:
-                #    currentBits += 1
-                #    maxIntegerForCurrentBits = (2 ** currentBits) - 1
-
                 self.__insertNewCode(prefix_with_char_key)
                 self.prefix = char
             
@@ -53,20 +48,28 @@ class LZWCompressor:
         return self.__convertCodesToBinaryString(compressedList)
 
     def __insertNewCode(self, prefix_with_char_key):
+        if self.biggestCode == self.maxCode:
+            self.__incrementCurrentCodeBits()
+
         if self.biggestCode < self.maxCode:
             self.dict[prefix_with_char_key] = self.biggestCode
             self.biggestCode += 1
 
+    def __incrementCurrentCodeBits(self):
+        if self.incrementableBits and self.currentBits < self.maxCodeBits:
+            self.currentBits += 1
+            self.maxCode = (1 << self.currentBits) - 1
+
     def __convertCodesToBinaryString(self, compressedList):
         minCodeLenght = self.biggestCode.bit_length()
         controlString = BinaryConversor.ConvertIntegerToBinaryString(minCodeLenght, self.controlBits)
-        print (minCodeLenght)
+        
         compressedContent = controlString
 
         for code in compressedList:
             converted = BinaryConversor.ConvertIntegerToBinaryString(code, minCodeLenght)
             compressedContent += converted
-            
+        print(compressedContent)
         return compressedContent
     
     @staticmethod
