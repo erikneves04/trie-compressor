@@ -40,6 +40,9 @@ def test_save_text_empty_file():
     with pytest.raises(Exception):
         FileManager.SaveTextFile(None, None)
 
-def test_save_binary_text_empty_file():
-    with pytest.raises(Exception):
-        FileManager.SaveBinaryFile(None, None)
+def test_should_save_empty_file():
+    file_name = 'content.txt'
+    FileManager.SaveTextFile(file_name, "")
+    
+    assert os.path.exists(file_name)
+    remove_temp_file(file_name)

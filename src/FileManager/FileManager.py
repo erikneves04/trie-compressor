@@ -7,6 +7,10 @@ class FileManager:
     
     @staticmethod
     def SaveBinaryFile(filePath, content):
+        if not content:
+            FileManager.SaveTextFile(filePath, "")
+            return
+        
         byte_content = int(content, 2).to_bytes((len(content) + 7) // 8, byteorder='big')
         with open(f"{filePath}", "wb") as file:
             file.write(byte_content)
