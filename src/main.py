@@ -10,7 +10,8 @@ DINAMIC_BIT_SIZE_START_WITH = 9 # Tamanho inicial dos códigos no caso de númer
 
 # Operações disponíveis
 class Operation(Enum):
-    COMPRESS = "compress"
+    COMPRESS_FIXED = "compress-fixed"
+    COMPRESS_DYNAMIC = "compress-dynamic"
     DECOMPRESS = "decompress"
 
     def __str__(self):
@@ -26,10 +27,10 @@ def parseArgs():
     
     return parser.parse_args()
 
-def ExecuteCompressOperation(origin, destiny, maxBits):
+def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
     content = FileManager.ReadFileAsText(origin)
     
-    compressor = LZWCompressor(SIGMA_SIZE, DEFAULT_BITS, DEFAULT_BITS) # Alterar o segundo parâmetro para definir o ponto de começo do número de bits
+    compressor = LZWCompressor(SIGMA_SIZE, initialCodeLengh, maxCodeLenght, dynamic)
     compressedContent = compressor.Compress(content)
     
     FileManager.SaveBinaryFile(destiny, compressedContent)
@@ -41,10 +42,16 @@ def ExecuteDecompressOperation(origin, destiny, maxBits):
 def main():
     args = parseArgs()
 
-    if args.operation == Operation.COMPRESS:
-        ExecuteCompressOperation(args.origin, args.destiny, args.max_code_bits)
+    if args.operation == Operation.COMPRESS_FIXED:
+        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False)
+
+    elif args.operation == Operation.COMPRESS_DYNAMIC:
+        maxCodeLenght = DEFAULT_BITS if args.max_code_bits == None else args.max_code_bits
+        ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True)
+
     elif args.operation == Operation.DECOMPRESS:
         ExecuteDecompressOperation(args.origin, args.destiny, args.max_code_bits)
+
     else:
         print ("Invalid operation selected.")
         exit (1)

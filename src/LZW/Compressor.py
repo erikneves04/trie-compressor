@@ -2,11 +2,11 @@ from BinaryConversor.BinaryConversor import BinaryConversor
 from Trie.Trie import Trie
 
 class LZWCompressor:
-    def __init__(self, sigmaSize, codeBits, initialBitsSize, incrementableBits = False):
+    def __init__(self, sigmaSize, initialBitsSize, maxCodeBits, incrementableBits = False):
         self.dict = Trie()
         self.sigmaSize = sigmaSize
-        self.codeBits = codeBits
         self.initialBitsSize = initialBitsSize
+        self.maxCodeBits = maxCodeBits
         self.incrementableBits = incrementableBits
 
         # Adicionando os códigos iniciais
