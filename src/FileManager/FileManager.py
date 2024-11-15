@@ -1,19 +1,9 @@
 class FileManager:
     @staticmethod
-    def ReadFileAsType(filePath, type):
-        with open(f"{filePath}", type, encoding="utf-8") as file:
+    def ReadFile(filePath):
+        with open(f"{filePath}", "r", encoding="utf-8") as file:
             data = file.read()
         return data
-    
-    @staticmethod
-    def ReadFileAsBinary(filePath):
-        data = FileManager.ReadFileAsType(filePath, "rb")
-        binary_data = ''.join(format(byte, '08b') for byte in data)
-        return binary_data
-
-    @staticmethod
-    def ReadFileAsText(filePath):
-        return FileManager.ReadFileAsType(filePath, "r")
     
     @staticmethod
     def SaveBinaryFile(filePath, content):

@@ -28,7 +28,7 @@ def parseArgs():
     return parser.parse_args()
 
 def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
-    content = FileManager.ReadFileAsText(origin)
+    content = FileManager.ReadFile(origin)
     
     compressor = LZWCompressor(SIGMA_SIZE, initialCodeLengh, maxCodeLenght, dynamic)
     compressedContent = compressor.Compress(content)
@@ -36,7 +36,7 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny, maxBits):
-    content = FileManager.ReadFileAsText(origin)
+    content = FileManager.ReadFile(origin)
     pass
 
 def main():
