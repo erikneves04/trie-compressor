@@ -17,26 +17,24 @@ class LZWCompressor:
     def Compress(self, content):
         compressedList = []
 
-        prefix = ""
-        biggestCode = self.sigmaSize
+        self.prefix = ""
+        self.biggestCode = self.sigmaSize
         #currentBits = self.initialBitsSize
         #maxIntegerForCurrentBits = (2 ** currentBits) - 1
         
-        maxCode = (1 << self.initialBitsSize) - 1
+        self.maxCode = (1 << self.initialBitsSize) - 1
 
         for char in content:
-            prefix_with_char = prefix + char
+            prefix_with_char = self.prefix + char
 
-            prefix_key = BinaryConversor.ConvertPrefixToBinaryString(prefix)
+            prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
             prefix_with_char_key = BinaryConversor.ConvertPrefixToBinaryString(prefix_with_char)
 
             if self.dict.ContainsKey(prefix_with_char_key):
-                prefix = prefix_with_char
+                self.prefix = prefix_with_char
             else:
-                #value = BinaryConversor.ConvertIntegerToBinaryString(, 12)
-                if self.dict[prefix_key] == None and biggestCode < maxCode:
-                    self.dict[prefix_key] = biggestCode
-                    biggestCode += 1
+                if self.dict[prefix_key] == None:
+                    self.__insertNewCode(prefix_key)
 
                 compressedList.append(self.dict[prefix_key])
 
@@ -44,18 +42,24 @@ class LZWCompressor:
                 #    currentBits += 1
                 #    maxIntegerForCurrentBits = (2 ** currentBits) - 1
 
-                # Verificamos se existem bits restantes para o acrescimo de códigos
-                if biggestCode < maxCode:
-                    self.dict[prefix_with_char_key] = biggestCode
-                    biggestCode += 1
-
-                prefix = char
+                self.__insertNewCode(prefix_with_char_key)
+                self.prefix = char
             
-        if prefix:
-            prefix_key = BinaryConversor.ConvertPrefixToBinaryString(prefix)
+        if self.prefix:
+            prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
             compressedList.append(self.dict[prefix_key])
 
-        minCodeLenght = biggestCode.bit_length()
+        compressedContent = self.__convertCodesToBinaryString(compressedList)
+        
+        return compressedContent
+
+    def __insertNewCode(self, prefix_with_char_key):
+        if self.biggestCode < self.maxCode:
+            self.dict[prefix_with_char_key] = self.biggestCode
+            self.biggestCode += 1
+
+    def __convertCodesToBinaryString(self, compressedList):
+        minCodeLenght = self.biggestCode.bit_length()
         compressedContent = ""
 
         for code in compressedList:
