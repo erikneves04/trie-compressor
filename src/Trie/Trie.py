@@ -36,16 +36,7 @@ class Trie:
     def GetDetailedReturn(self):
         return self.detailedReturn
 
-    def Insert(self, key, value):
-        if not key:
-            raise ValueError("The key cannot be empty")
-        
-        if not isinstance(value, int):
-            raise ValueError("The value must be an integer.")
-        
-        if value < 0:
-            raise ValueError("The value cannot be negative.")
-        
+    def Insert(self, key, value):       
         detailedReturn = self.GetDetailedReturn()
         
         currentNode = self.root
@@ -62,11 +53,17 @@ class Trie:
             return (currentNode.GetSubstring(), currentNode.GetValue()) if not detailedReturn else (key, key, None, value)
 
         while i < len(key):
-            childNode = currentNode.children[bit]
-            substring = childNode.GetSubstring()
-            lenSubstring = len(substring)
+            if currentNode.children[bit] is None:
+                currentNode.children[bit] = _trieNode(currentNode, key[i:], value)
+                currentNode = currentNode.children[bit]
+                return (currentNode.GetSubstring(), currentNode.GetValue()) if not detailedReturn else (key, key, None, value)
+            else:
+                childNode = currentNode.children[bit]
+                substring = childNode.GetSubstring()
+                lenSubstring = len(substring)
 
-            for j in range(lenSubstring):
+            j = 0
+            while j < lenSubstring and i + j < len(key):
                 if i + j >= len(key) or key[i + j] != substring[j]:
                     prefixMatch = substring[:j]
                     suffixExisting = substring[j:]
@@ -96,8 +93,21 @@ class Trie:
                     self._depth = max(self._depth, insertionDepth)
 
                     return (key, value) if not detailedReturn else (key, suffixNew, suffixExisting, newChildNode.GetValue())
+                
+                j += 1
+            if i + j == (len(key) - 1) and j < lenSubstring:
+                bit = substring[j]
+                newChildNode = _trieNode(currentNode, IS_WORD_FULL, value)
+                childNode.children[2] = newChildNode
+                
+                newChildExisting = _trieNode(currentNode, substring[j:], value)
+                newChildExisting.children = childNode.children[bit].children if childNode.children[bit] is not None else [None] * (SIGMA_SIZE + 1)
+                childNode.children[bit] = newChildExisting
+                currentNode: _trieNode = childNode.children[bit]
 
-            i += lenSubstring
+                return (key, value) if not detailedReturn else (key, IS_WORD_FULL, currentNode.GetSubstring(), currentNode.GetValue())
+
+            i += lenSubstring            
             bit = int(key[i]) if i < len(key) else None
             if bit is not None and childNode.children[bit] is None and childNode.IsLeaf():
                 newChildNode = _trieNode(currentNode, IS_WORD_FULL, childNode.GetValue())
@@ -106,53 +116,48 @@ class Trie:
                 currentNode: _trieNode = childNode.children[bit]
 
                 return (key, value) if not detailedReturn else (key, IS_WORD_FULL, currentNode.GetSubstring(), currentNode.GetValue())
-            
+
             currentNode = childNode
 
         return (key, value) if not detailedReturn else (key, currentNode.GetSubstring(), None, value)
 
-    def Search(self, key):
-        if not key:
-            raise ValueError("The key cannot be empty")
-        
+    def Search(self, key):        
         detailedReturn = self.GetDetailedReturn()
         
         currentNode = self.root
         i = 0
         bit = int(key[i])
+
         if currentNode.children[bit] is None:
-            return False
+            return None
 
         searchkey = ""
         while i < len(key):
+            
             child = currentNode.children[bit]
 
             if child is None:
-                return False
+                return None
             
             substring = child.GetSubstring()
             lenSubstring = len(substring)
 
             for j in range(lenSubstring):
                 if i + j >= len(key) or key[i + j] != substring[j]:
-                    return False
+                    return None
                 
                 searchkey += substring[j]
             
             i += lenSubstring
             bit = int(key[i]) if i < len(key) else None
-            if not currentNode.IsLeaf():
-                currentNode = child
-            else:
-                return None
+            currentNode = child
 
         if currentNode.children[SIGMA_SIZE] is None:
             suffix = currentNode.GetSubstring()
         else:
-            currentNode = currentNode.children[2]
+            currentNode = currentNode.children[SIGMA_SIZE]
             suffix = currentNode.GetSubstring()
-        
-        return (searchkey, suffix) if detailedReturn else True
+        return (searchkey, suffix, currentNode.GetValue()) if detailedReturn else currentNode.GetValue()
 
     def ContainsKey(self, key):
         return self.Search(key) != None
