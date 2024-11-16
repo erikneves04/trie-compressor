@@ -154,6 +154,9 @@ class Trie:
         
         return (searchkey, suffix) if detailedReturn else True
 
+    def ContainsKey(self, key):
+        return self.Search(key) != None
+
     def Remove(self, key):
         pass
 
