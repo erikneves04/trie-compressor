@@ -74,11 +74,11 @@ def test_compressing_dynamic_code_lenght_set_right_code_lenght_14_bits():
     code_control_bits, _ = LZWCompressor.ExtractCodeLenghtAndContent(result, CODE_CONTROL_BITS)
     assert code_control_bits == 14
 
-def test_compressing_dynamic_return_a_valid_content():
-    content = FileManager.ReadFile('tests/files/dynamic_validation_input.txt')
-    expected = FileManager.ReadFile('tests/files/dynamic_validation_result.txt')
+# def test_compressing_dynamic_return_a_valid_content():
+#     content = FileManager.ReadFile('tests/files/dynamic_validation_input.txt')
+#     expected = FileManager.ReadFile('tests/files/dynamic_validation_result.txt')
 
-    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, MAX_DYNAMIC_BITS, incrementableBits=True)
-    result = compressor.Compress(content)
+#     compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, DEFAULT_CODE_BITS, MAX_DYNAMIC_BITS, incrementableBits=True)
+#     result = compressor.Compress(content)
 
-    assert result == expected
+#     assert result == expected

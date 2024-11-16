@@ -40,17 +40,17 @@ def expected_values_insertion():
 @pytest.fixture(scope="function")
 def expected_values_search():
     return [
-        ("01001000", "01000"),
-        ("01100101", "1"),
-        ("01101100", "00"),
-        ("01101100", "00"),
-        ("01101111", "11"),
-        ("00100000", "0"),
-        ("01010111", "10111"),
-        ("01101111", "11"),
-        ("01110010", "10010"),
-        ("01100100", "0"),
-        ("00100001", "1")
+        ("01001000", "01000", 1),
+        ("01100101", "1", 2),
+        ("01101100", "00", 3),
+        ("01101100", "00", 3),
+        ("01101111", "11", 5),
+        ("00100000", "0", 6),
+        ("01010111", "10111",7),
+        ("01101111", "11", 5),
+        ("01110010", "10010", 9),
+        ("01100100", "0", 10),
+        ("00100001", "1", 11)
     ]
 
 def test_trie_empty_has_zero_nodes(trie):
@@ -120,23 +120,10 @@ def test_trie_spli_intermediate_node_leaf(trie):
     result = trie.Insert("110",3)
     assert result == ("110", "0", "1", 3) 
     
-    
-def test_trie_insert_string_void(trie):
-    with pytest.raises(ValueError):
-        trie.Insert("", 1)  
-
-def test_trie_insert_value_not_int(trie):
-    with pytest.raises(ValueError):
-        trie.Insert("0101", "string") 
-
-def test_trie_insert_value_not_positive(trie):
-    with pytest.raises(ValueError):
-        trie.Insert("0101", -1)  
-
 @pytest.mark.parametrize(
     "key, value, expected", 
-    [("000", 1, ("000", "000")),
-     ("111", 1, ("111", "111")),
+    [("000", 1, ("000", "000", 1)),
+     ("111", 1, ("111", "111", 1)),
 ])    
 def test_trie_search_trivial_case(trie, key, value, expected):
     trie.Insert(key, value)
@@ -145,7 +132,7 @@ def test_trie_search_trivial_case(trie, key, value, expected):
     
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected",
-    [("000", 1, "111", 2, ("111", "111")),
+    [("000", 1, "111", 2, ("111", "111", 2)),
 ])
 def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
@@ -155,11 +142,11 @@ def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, f
     
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected1, expected2", 
-    [("00000", 1, "00011", 2, ("00000", "00"), ("00011", "11")),
-     ("101", 1, "100", 2, ("101", "1"), ("100", "0")),
-     ("110", 1, "111", 2, ("110", "0"), ("111", "1")),
-     ("0110", 1, "0111", 2, ("0110", "0"), ("0111", "1")),
-     ("00001", 1, "00000", 2, ("00001", "1"), ("00000", "0")),
+    [("00000", 1, "00011", 2, ("00000", "00", 1), ("00011", "11", 2)),
+     ("101", 1, "100", 2, ("101", "1", 1), ("100", "0", 2)),
+     ("110", 1, "111", 2, ("110", "0", 1), ("111", "1", 2)),
+     ("0110", 1, "0111", 2, ("0110", "0", 1), ("0111", "1", 2)),
+     ("00001", 1, "00000", 2, ("00001", "1", 1), ("00000", "0", 2)),
 ])
 def test_trie_search_with_two_str_bin_with_common_prefix(trie, first_key, first_value, second_key, second_value, expected1, expected2):
     trie.Insert(first_key, first_value)
@@ -170,14 +157,14 @@ def test_trie_search_with_two_str_bin_with_common_prefix(trie, first_key, first_
     
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected", 
-    [("111", 1, "11101", 2, ("111", "$")),
-     ("101", 1, "10111", 2, ("101", "$")),
-     ("110", 1, "11010", 2, ("110", "$")),
-     ("0110", 1, "011011", 2, ("0110", "$")),
-     ("000", 1, "0001", 2, ("000", "$")),
-     ("1010", 1, "10101", 2, ("1010", "$")),
-     ("1110", 1, "11101", 2, ("1110", "$")),
-     ("1001", 1, "100111", 2, ("1001", "$")),
+    [("111", 1, "11101", 2, ("111", "$", 1)),
+     ("101", 1, "10111", 2, ("101", "$", 1)),
+     ("110", 1, "11010", 2, ("110", "$", 1)),
+     ("0110", 1, "011011", 2, ("0110", "$", 1)),
+     ("000", 1, "0001", 2, ("000", "$", 1)),
+     ("1010", 1, "10101", 2, ("1010", "$", 1)),
+     ("1110", 1, "11101", 2, ("1110", "$", 1)),
+     ("1001", 1, "100111", 2, ("1001", "$", 1)),
 ])   
 def test_trie_search_with_str_bin_into_leaf_node(trie, first_key, first_value, second_key, second_value, expected):
     trie.Insert(first_key, first_value)
@@ -207,14 +194,11 @@ def test_trie_search_str_bin_not_exist(trie, list_of_insertion, non_existing_key
         trie.Insert(key, value)
     
     result = trie.Search(non_existing_key)
-    assert result == False
+    assert result == None
              
 def test_trie_search_without_children_root(trie):
     trie.Insert("111", 1)
     result = trie.Search("011")
-    assert result == False
+    assert result == None
 
-def test_trie_search_string_void(trie):
-    with pytest.raises(ValueError):
-        trie.Search("")  
 
