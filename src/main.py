@@ -1,7 +1,7 @@
 import argparse
 from enum import Enum
-from LZW.Compressor import LZWCompressor
 from FileManager.FileManager import FileManager
+from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
 
 # Constantes
