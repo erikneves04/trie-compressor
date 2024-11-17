@@ -10,7 +10,7 @@ class LZWCompressor:
         self.maxCodeBits = maxCodeBits
         self.incrementableBits = incrementableBits
 
-        # Adicionando os códigos iniciais
+        # Inicializando o dicionário com as raízes iniciais
         for index in range(sigmaSize):
             bin_key = BinaryConversor.ConvertPrefixToBinaryString(chr(index))
             self.dict[bin_key] = index
