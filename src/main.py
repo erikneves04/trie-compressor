@@ -2,7 +2,7 @@ import argparse
 from enum import Enum
 from LZW.Compressor import LZWCompressor
 from FileManager.FileManager import FileManager
-from LZW.Decompression import LZWDecompressor
+from LZW.Decompressor import LZWDecompressor
 
 # Constantes
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
