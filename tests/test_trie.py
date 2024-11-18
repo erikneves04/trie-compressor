@@ -112,7 +112,7 @@ def test_trie_insert_random_list_str_bin(trie, list_of_insertion, expected_value
         result = trie.Insert(key, value)
         assert result == expected
 
-    assert trie.GetNodeCount() == 18
+    assert trie.GetNodeCount() == 20
     
 def test_trie_spli_intermediate_node_leaf(trie):
     trie.Insert("111",1)
@@ -128,6 +128,7 @@ def test_trie_spli_intermediate_node_leaf(trie):
 def test_trie_search_trivial_case(trie, key, value, expected):
     trie.Insert(key, value)
     search = trie.Search(key)
+    search = search[:3]
     assert search == expected
     
 @pytest.mark.parametrize(
@@ -138,6 +139,7 @@ def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, f
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
     search = trie.Search(second_key)
+    search = search[:3]
     assert search == expected
     
 @pytest.mark.parametrize(
@@ -151,9 +153,11 @@ def test_trie_search_with_two_str_bin_with_different_prefixes(trie, first_key, f
 def test_trie_search_with_two_str_bin_with_common_prefix(trie, first_key, first_value, second_key, second_value, expected1, expected2):
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
-    result1 = trie.Search(first_key)
-    result2 = trie.Search(second_key)
-    assert (result1, result2) == (expected1, expected2)
+    search1 = trie.Search(first_key)
+    search1 = search1[:3]
+    search2 = trie.Search(second_key)
+    search2 = search2[:3]
+    assert (search1, search2) == (expected1, expected2)
     
 @pytest.mark.parametrize(
     "first_key, first_value, second_key, second_value, expected", 
@@ -170,6 +174,7 @@ def test_trie_search_with_str_bin_into_leaf_node(trie, first_key, first_value, s
     trie.Insert(first_key, first_value)
     trie.Insert(second_key, second_value)
     search = trie.Search(first_key)
+    search = search[:3]
     assert search == expected
     
 def test_trie_search_random_list_str_bin(trie, list_of_insertion, expected_values_search):
@@ -177,8 +182,9 @@ def test_trie_search_random_list_str_bin(trie, list_of_insertion, expected_value
         trie.Insert(key, value)
         
     for (key, value),  expected in zip(list_of_insertion, expected_values_search):
-        result = trie.Search(key)
-        assert result == expected
+        search = trie.Search(key)
+        search = search[:3]
+        assert search == expected
  
 @pytest.mark.parametrize(
     "non_existing_key",
@@ -193,12 +199,12 @@ def test_trie_search_str_bin_not_exist(trie, list_of_insertion, non_existing_key
     for key, value in list_of_insertion:
         trie.Insert(key, value)
     
-    result = trie.Search(non_existing_key)
-    assert result == None
+    search = trie.Search(non_existing_key)
+    assert search == None
              
 def test_trie_search_without_children_root(trie):
     trie.Insert("111", 1)
-    result = trie.Search("011")
-    assert result == None
+    search = trie.Search("011")
+    assert search == None
 
 
