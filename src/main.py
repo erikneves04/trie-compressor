@@ -1,7 +1,8 @@
 import argparse
 from enum import Enum
-from LZW.Compressor import LZWCompressor
 from FileManager.FileManager import FileManager
+from LZW.Compressor import LZWCompressor
+from LZW.Decompressor import LZWDecompressor
 
 # Constantes
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
@@ -34,13 +35,16 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
     compressedContent = compressor.Compress(content)
     
-    FileManager.SaveBinaryFile(destiny, compressedContent)
+    FileManager.SaveTextFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny):
     raw_content = FileManager.ReadFile(origin)
     maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
 
-    pass
+    decompressor = LZWDecompressor(SIGMA_SIZE)
+    decompressedContent = decompressor.Decompress(maxBitsUsed, content)
+
+    FileManager.SaveTextFile(destiny, decompressedContent)
 
 def main():
     args = parseArgs()
