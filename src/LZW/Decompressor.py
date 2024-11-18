@@ -30,8 +30,9 @@ class LZWDecompressor:
             current = self.__getNextCode(content, index, code_length)
             index += code_length
 
-            if self.dict.ContainsKey(current):
-                currentString = self.dict[current]
+            dictValue = self.dict[current]
+            if dictValue != None:
+                currentString = dictValue
                 decompressedList.append(currentString)
 
                 P = previousString

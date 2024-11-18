@@ -35,10 +35,10 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
     compressedContent = compressor.Compress(content)
     
-    FileManager.SaveTextFile(destiny, compressedContent)
+    FileManager.SaveBinaryFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny):
-    raw_content = FileManager.ReadFile(origin)
+    raw_content = FileManager.ReadBinaryFile(origin)
     maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
 
     decompressor = LZWDecompressor(SIGMA_SIZE)
