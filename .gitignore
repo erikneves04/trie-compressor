@@ -5,3 +5,4 @@ requirements-compressed.zip
 input.txt
 output.zip
 decompressed.txt
+.coverage
