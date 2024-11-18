@@ -187,9 +187,9 @@ class Trie:
             self._nodeCount -= 1
             return (key, parentNode.GetSubstring(), value) if self.detailedReturn else True
 
-        non_none_children_count = len([child for child in parentNode.children if child is not None])
+        nonNoneChildrenCount = len([child for child in parentNode.children if child is not None])
         
-        if non_none_children_count - 1 == 1:
+        if nonNoneChildrenCount - 1 == 1:
             if currentNode.children[SIGMA_SIZE] is None:
                 currentNode.children[SIGMA_SIZE] = None
                 self._nodeCount -= 1
