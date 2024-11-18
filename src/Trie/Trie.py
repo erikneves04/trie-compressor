@@ -168,34 +168,58 @@ class Trie:
 
     def Remove(self, key):
         self.SetDetailedReturn(True)
+
         search_result = self.Search(key)
-        currentNode = search_result[3]
-        
-        if currentNode is None:
+        if search_result is None:
             return False
         
-        
+        currentNode = search_result[3]
+        value = currentNode._value
         currentNode.SetValue(None)
+                
+        if currentNode.children[SIGMA_SIZE] is None:
+            parentNode: _trieNode = currentNode.previous
+        else:
+            parentNode = currentNode
+
+        if parentNode is self.root and not any(child for child in currentNode.children):
+            parentNode.children[int(key[0])] = None
+            self._nodeCount -= 1
+            return (key, parentNode.GetSubstring(), value) if self.detailedReturn else True
+
+        non_none_children_count = len([child for child in parentNode.children if child is not None])
         
-        if currentNode.children[SIGMA_SIZE] is not None:
-            currentNode.children[SIGMA_SIZE] = None
-            self._nodeCout -= 1
-        
-        parentNode: _trieNode = currentNode.previous
-        if len([child for child in parentNode.children if child is not None]) == 1:
-            substringCurrentNode = currentNode.substring
-            substringParentNode = parentNode.substring
-            substringParentNode += substringCurrentNode
-            parentNode.SetSubstring(substringParentNode)
-            
-            childCurrenteNode = currentNode.children
-            parentNode.children = childCurrenteNode
-            self._nodeCout -= 1
+        if non_none_children_count - 1 == 1:
+            if currentNode.children[SIGMA_SIZE] is None:
+                currentNode.children[SIGMA_SIZE] = None
+                self._nodeCount -= 1
+                bit = int(currentNode.substring[0])
+                bitFusion = 0 if bit == 1 else 1
+                
+                substringFusion = parentNode.children[bitFusion].substring
+                substringParentNode = parentNode.substring
+                substringParentNode += substringFusion
+                parentNode.SetSubstring(substringParentNode)                
+            else:
+                for i, child in enumerate(currentNode.children):
+                    if i != SIGMA_SIZE and child is not None:
+                        child_to_fuse = child
+                        break
+                if child_to_fuse is not None:
+                    parentNode = currentNode
+                    substringFusion = child_to_fuse.substring
+                    substringParentNode = currentNode.substring
+                    substringParentNode += substringFusion
+                    parentNode.SetSubstring(substringParentNode)
+
+            childCurrentNode = currentNode.children
+            parentNode.children = childCurrentNode
+            self._nodeCount -= 1
             self._depth -= 1
             
-            return True 
-        
-        return True                    
+            return (key, parentNode.GetSubstring(), value) if self.detailedReturn else True
+
+        return (key, parentNode.GetSubstring(), value) if self.detailedReturn else True                    
 
     def __getitem__(self, key):
         return self.Search(key)
