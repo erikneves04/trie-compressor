@@ -3,6 +3,8 @@ from enum import Enum
 from FileManager.FileManager import FileManager
 from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
+import cProfile
+import subprocess
 
 # Constantes
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
@@ -24,8 +26,10 @@ def parseArgs():
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
     parser.add_argument('--operation', type=Operation, choices=list(Operation), required=True, help='Seleção da operação de compressão ou descompressão.')
+    parser.add_argument('--analyze', type=bool, required=False, default=False, help='Ativa o profiling com cProfile (True ou False).')
     parser.add_argument('--origin', type=str, required=True, help='Arquivo de origem.')
     parser.add_argument('--destiny', type=str, required=True, help='Arquivo de destino.')
+    
     
     return parser.parse_args()
 
@@ -64,4 +68,11 @@ def main():
         exit (1)
 
 if __name__ == "__main__":
-    main()
+    args = parseArgs()
+    
+    if args.analyze:
+        profile_output_file = "profiling_result.prof"
+        cProfile.run('main()', profile_output_file)
+        subprocess.run(["python3", "analyze_profile.py"])
+    else:
+        main()
