@@ -23,14 +23,15 @@ class LZWCompressor:
 
         self.currentBits = self.initialBitsSize
         self.maxCode = (1 << self.currentBits) - 1
-
+        
         for char in content:
             prefix_with_char = self.prefix + char
 
             prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
             prefix_with_char_key = BinaryConversor.ConvertPrefixToBinaryString(prefix_with_char)
 
-            if self.dict.ContainsKey(prefix_with_char_key):
+            dictValue = self.dict[prefix_with_char_key]
+            if dictValue != None:
                 self.prefix = prefix_with_char
             else:
                 if self.dict[prefix_key] == None:
