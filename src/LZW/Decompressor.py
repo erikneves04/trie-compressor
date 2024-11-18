@@ -41,14 +41,13 @@ class LZWDecompressor:
                 biggestCode += 1
 
             else:
-                currentString = chr(int(current, 2))
-
                 P = previousString
-                C = currentString
+                C = P[0]
 
-                decompressedList.append(P + C)
+                currentString = P + C
+                decompressedList.append(currentString)
 
-                self.dict[BinaryConversor.ConvertIntegerToBinaryString(biggestCode)] = P + C
+                self.dict[BinaryConversor.ConvertIntegerToBinaryString(biggestCode)] = currentString
                 biggestCode += 1
 
         return ''.join(decompressedList)
