@@ -5,6 +5,7 @@ from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
 import cProfile
 import subprocess
+import os
 
 # Constantes
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
@@ -71,8 +72,21 @@ if __name__ == "__main__":
     args = parseArgs()
     
     if args.analyze:
-        profile_output_file = "profiling_result.prof"
+        # Caminho para a pasta "Analysis" no mesmo nível da pasta "src"
+        analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
+
+        # Verifica se a pasta "Analysis" existe, se não, cria
+        if not os.path.exists(analysis_folder):
+            os.makedirs(analysis_folder)
+
+        # Caminho completo para o arquivo de saída do cProfile
+        profile_output_file = os.path.join(analysis_folder, "profiling_result.prof")
+        
+        # Executa o perfil e salva na pasta "Analysis"
         cProfile.run('main()', profile_output_file)
-        subprocess.run(["python3", "analyze_profile.py"])
+        
+        # Executa o script de análise do perfil, que também estará na pasta "Analysis"
+        subprocess.run(["python3", os.path.join(analysis_folder, "analyze_profile.py")])
+
     else:
         main()
