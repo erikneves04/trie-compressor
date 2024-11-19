@@ -1,6 +1,8 @@
+import sys
+from pympler import asizeof
+
 SIGMA_SIZE = 2
 IS_WORD_FULL = "$"
-
 class _trieNode:
     def __init__(self, previous, substring="", value=None):
         self.children = [None] * (SIGMA_SIZE + 1)
@@ -27,6 +29,18 @@ class _trieNode:
 
     def GetSubstring(self):
         return self.substring
+    
+    def MemoryUsage(self, detailed=False):
+        """
+        Retorna o uso de memória do nó atual.
+
+        :param detailed: Se True, usa 'asizeof' para incluir referências indiretas.
+        :return: Memória usada em bytes.
+        """
+        if detailed:
+            return asizeof.asizeof(self)  
+        else:
+            return sys.getsizeof(self)
 
 class Trie:
     def __init__(self, detailedReturn = False):
