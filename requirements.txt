@@ -1,2 +1,4 @@
 pytest
 argparse
+seaborn
+pandas

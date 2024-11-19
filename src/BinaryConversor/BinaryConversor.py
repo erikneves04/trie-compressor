@@ -4,18 +4,13 @@ class BinaryConversor:
         if not binary:
             return ""
         
-        byte_array = [binary[i:i + 8] for i in range(0, len(binary), 8)]
-        byte_data = bytes(int(byte, 2) for byte in byte_array)
-        return byte_data.decode('utf-8')
-    
+        byte_data = bytes(int(binary[i:i + 8], 2) for i in range(0, len(binary), 8))
+        return byte_data.decode('utf-8', errors='ignore')  
+
     @staticmethod
-    def ConvertIntegerToBinaryString(integer, size = 0):
-        binary_str = bin(integer)[2:]
-        binary_str = binary_str.zfill(size)
-        
-        return binary_str
-    
+    def ConvertIntegerToBinaryString(integer, size=0):
+        return format(integer, f'0{size}b') if size else bin(integer)[2:]
+
     @staticmethod
     def ConvertPrefixToBinaryString(prefix):
-        binary_parts = [BinaryConversor.ConvertIntegerToBinaryString(ord(c)) for c in prefix]
-        return ''.join(binary_parts)
+        return ''.join(BinaryConversor.ConvertIntegerToBinaryString(ord(c)) for c in prefix)

@@ -68,8 +68,8 @@ def main():
         ExecuteDecompressOperation(args.origin, args.destiny)
 
     else:
-        print ("Invalid operation selected.")
-        exit (1)
+        print("Invalid operation selected.")
+        exit(1)
 
 if __name__ == "__main__":
     args = parseArgs()
