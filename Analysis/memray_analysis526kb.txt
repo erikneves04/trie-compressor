@@ -1,0 +1,59 @@
+📏 Total allocations:
+        241
+
+📦 Total memory allocated:
+        34.196MB
+
+📊 Histogram of allocation size:
+        min: 1.000B
+        -----------------------------------------
+        < 4.000B   :  8 ▇▇▇▇▇▇
+        < 17.000B  :  0 
+        < 71.000B  :  2 ▇▇
+        < 296.000B : 24 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 1.203KB  : 35 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 4.993KB  : 34 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 20.728KB : 36 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 86.037KB : 36 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 357.118KB: 31 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        <=1.448MB  : 35 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        -----------------------------------------
+        max: 1.448MB
+
+📂 Allocator type distribution:
+         REALLOC: 169
+         MALLOC: 59
+         MMAP: 11
+         CALLOC: 2
+
+🥇 Top 5 largest allocating locations (by size):
+        - ConvertIntegerToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.py:13 -> 9.001MB
+        - __convertCodesToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:76 -> 8.677MB
+        - Compress:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:43 -> 8.677MB
+        - ReadFile:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/FileManager/FileManager.py:11 -> 2.191MB
+        - SaveBinaryFile:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/FileManager/FileManager.py:33 -> 1.633MB
+
+🥇 Top 5 largest allocating locations (by number of allocations):
+        - __convertCodesToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:76 -> 60
+        - Compress:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:43 -> 60
+        - SaveBinaryFile:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/FileManager/FileManager.py:33 -> 50
+        - exists:/usr/lib/python3.10/genericpath.py:19 -> 24
+        - _add_action:/usr/lib/python3.10/argparse.py:1486 -> 16
+
+
+Location                                      | Total Memory | Total Memory % | Own Memory | Own Memory % | Count
+----------------------------------------------------------------------------------------------------------
+ExecuteCompressOperation                      | 14.932MB     | 100.00%        | 0.000B     | 0.00%        | 19
+main                                          | 14.932MB     | 100.00%        | 0.000B     | 0.00%        | 19
+<module>                                      | 14.932MB     | 100.00%        | 0.000B     | 0.00%        | 19
+Compress                                      | 14.385MB     | 96.33%         | 990.000KB  | 6.47%        | 17
+__convertCodesToBinaryString                  | 10.416MB     | 69.75%         | 2.414MB    | 16.17%       | 11
+ConvertIntegerToBinaryString                  | 9.001MB      | 60.28%         | 9.001MB    | 60.28%       | 10
+__setitem__                                   | 1.003MB      | 6.72%          | 592.000B   | 0.00%        | 4
+Insert                                        | 1.002MB      | 6.71%          | 2.256KB    | 0.01%        | 3
+__insertNewCode                               | 1.002MB      | 6.71%          | 0.000B     | 0.00%        | 3
+__init__                                      | 1.000MB      | 6.70%          | 1.000MB    | 6.70%        | 1
+<listcomp>                                    | 1.000MB      | 6.70%          | 1.000MB    | 6.70%        | 1
+ConvertPrefixToBinaryString                   | 1.000MB      | 6.70%          | 0.000B     | 0.00%        | 1
+ReadFile                                      | 559.469KB    | 3.66%          | 559.469KB  | 3.66%        | 1
+__init__                                      | 592.000B     | 0.00%          | 0.000B     | 0.00%        | 1
