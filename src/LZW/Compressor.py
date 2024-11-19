@@ -4,7 +4,7 @@ from Trie.Trie import Trie
 import time
 
 class LZWCompressor:
-    def __init__(self, sigmaSize, controlBits, initialBitsSize, maxCodeBits, incrementableBits=False, enableStatistics=True):
+    def __init__(self, sigmaSize, controlBits, initialBitsSize, maxCodeBits, incrementableBits=False, enableStatistics=False):
         self.dict = Trie()
         self.sigmaSize = sigmaSize
         self.controlBits = controlBits

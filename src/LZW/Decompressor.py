@@ -5,7 +5,7 @@ from BinaryConversor.BinaryConversor import BinaryConversor
 from Trie.Trie import Trie
 
 class LZWDecompressor:
-    def __init__(self, sigmaSize, enableStatistics=True):
+    def __init__(self, sigmaSize, enableStatistics=False):
         self.dict = Trie()
         self.sigmaSize = sigmaSize
 

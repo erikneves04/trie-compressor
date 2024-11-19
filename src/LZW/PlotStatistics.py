@@ -25,5 +25,6 @@ def GenerateSideBySideForLabel(label, title):
     plt.savefig(f'Images/{label}_side_by_side.png')
     #plt.show()
 
-GenerateSideBySideForLabel('compressed', 'Métricas Coletadas Durante a Compressão')
-GenerateSideBySideForLabel('decompressed', 'Métricas Coletadas Durante a Descompressão')
+def PlotStatistics():
+    GenerateSideBySideForLabel('compressed', 'Métricas Coletadas Durante a Compressão')
+    GenerateSideBySideForLabel('decompressed', 'Métricas Coletadas Durante a Descompressão')
