@@ -24,18 +24,26 @@ class Operation(Enum):
     def __str__(self):
         return self.value
 
+# Análise de memória
+class AnalysisType(Enum):
+    NONE = "None"
+    CPROGILE = "cProfile"
+    MEMRAY = "memray"
+
+    def __str__(self):
+        return self.value
+
 def parseArgs():
     parser = argparse.ArgumentParser(description="Aplicação para compressão e descompressão de arquivos - LZW")
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
     parser.add_argument('--operation', type=Operation, choices=list(Operation), required=True, help='Seleção da operação de compressão ou descompressão.')
-    parser.add_argument('--analyze-performance', type=bool, required=False, default=False, help='Ativa o profiling com cProfile (True ou False).')
-    parser.add_argument('--analyze-memory', type=bool, required=False, default=False, help='Ativa o profiling com memray (True ou False).')
+    parser.add_argument('--analysis', type=AnalysisType, choices=list(AnalysisType), required=False, default= AnalysisType.NONE, help='Seleção da operação de compressão ou descompressão.')
+    parser.add_argument('--statistics', type=bool, required=False, default=False, help='Habilita a geração de estatísticas na compressão e descompresão.')
     parser.add_argument('--origin', type=str, required=True, help='Arquivo de origem.')
     parser.add_argument('--destiny', type=str, required=True, help='Arquivo de destino.')
 
     return parser.parse_args()
-
 
 def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
     content = FileManager.ReadFile(origin)
@@ -58,7 +66,7 @@ def main():
     args = parseArgs()
 
     if args.operation == Operation.COMPRESS_FIXED:
-        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False)
+        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False,)
 
     elif args.operation == Operation.COMPRESS_DYNAMIC:
         maxCodeLenght = DEFAULT_BITS if args.max_code_bits == None else args.max_code_bits
@@ -74,7 +82,7 @@ def main():
 if __name__ == "__main__":
     args = parseArgs()
     
-    if args.analyze_performance:
+    if args.analysis == AnalysisType.CPROGILE:
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
         if not os.path.exists(analysis_folder):
@@ -88,7 +96,7 @@ if __name__ == "__main__":
         
         # Executa o script de análise do perfil, que também estará na pasta "Analysis"
         subprocess.run(["python3", os.path.join(analysis_folder, "analyze_profile.py")])
-    elif args.analyze_memory:
+    elif args.analysis == AnalysisType.MEMRAY:
         # Caminho para a pasta "Analysis" no mesmo nível da pasta "src"
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
@@ -102,7 +110,6 @@ if __name__ == "__main__":
         with memray.Tracker(destination=FileDestination(memray_output_file)) as tracker:
             # Executa a lógica principal do código com profiling de memória
             main()
-
 
     else:
         main()
