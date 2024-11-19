@@ -19,28 +19,32 @@ class LZWCompressor:
         compressedList = []
 
         self.prefix = ""
+        self.prefixValue = None
         self.biggestCode = self.sigmaSize
 
         self.currentBits = self.initialBitsSize
         self.maxCode = (1 << self.currentBits) - 1
-        
+
         for char in content:
             prefix_with_char = self.prefix + char
 
             prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
-            prefix_with_char_key = BinaryConversor.ConvertPrefixToBinaryString(prefix_with_char)
+            prefix_with_char_key = prefix_key + BinaryConversor.ConvertIntegerToBinaryString(ord(char))
 
             dictValue = self.dict[prefix_with_char_key]
             if dictValue != None:
                 self.prefix = prefix_with_char
+                self.prefixValue = dictValue
             else:
                 if self.dict[prefix_key] == None:
                     self.__insertNewCode(prefix_key)
 
-                compressedList.append(self.dict[prefix_key])
+                value = self.prefixValue if self.prefixValue != None else self.dict[prefix_key]
+                compressedList.append(value)
 
                 self.__insertNewCode(prefix_with_char_key)
                 self.prefix = char
+                self.prefixValue = None
             
         if self.prefix:
             prefix_key = BinaryConversor.ConvertPrefixToBinaryString(self.prefix)
@@ -62,16 +66,16 @@ class LZWCompressor:
             self.maxCode = (1 << self.currentBits) - 1
 
     def __convertCodesToBinaryString(self, compressedList):
-        minCodeLenght = self.biggestCode.bit_length()
-        controlString = BinaryConversor.ConvertIntegerToBinaryString(minCodeLenght, self.controlBits)
-        
-        compressedContent = controlString
+        minCodeLength = self.biggestCode.bit_length()
+        controlString = BinaryConversor.ConvertIntegerToBinaryString(minCodeLength, self.controlBits)
+
+        compressedContent = [controlString]
 
         for code in compressedList:
-            converted = BinaryConversor.ConvertIntegerToBinaryString(code, minCodeLenght)
-            compressedContent += converted
-        
-        return compressedContent
+            converted = BinaryConversor.ConvertIntegerToBinaryString(code, minCodeLength)
+            compressedContent.append(converted)
+
+        return ''.join(compressedContent)
     
     @staticmethod
     def ExtractCodeLenghtAndContent(input, controlBits):
