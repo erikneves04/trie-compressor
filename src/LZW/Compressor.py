@@ -24,7 +24,7 @@ class LZWCompressor:
 
         self.currentBits = self.initialBitsSize
         self.maxCode = (1 << self.currentBits) - 1
-
+        
         for char in content:
             prefix_with_char = self.prefix + char
 
