@@ -11,16 +11,11 @@ class BinaryConversor:
     @staticmethod
     def ConvertIntegerToBinaryString(integer, size = 0):
         binary_str = bin(integer)[2:]
-
-        if size != 0:
-            binary_str = binary_str.zfill(size)
+        binary_str = binary_str.zfill(size)
         
         return binary_str
-
+    
     @staticmethod
     def ConvertPrefixToBinaryString(prefix):
-        binary = ""
-        for c in prefix:
-            binary += BinaryConversor.ConvertIntegerToBinaryString(ord(c))
-
-        return binary
+        binary_parts = [BinaryConversor.ConvertIntegerToBinaryString(ord(c)) for c in prefix]
+        return ''.join(binary_parts)
