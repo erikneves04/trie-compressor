@@ -1,7 +1,6 @@
 import argparse
 from enum import Enum
 from FileManager.FileManager import FileManager
-from LZW import PlotStatistics
 from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
 from LZW.PlotStatistics import PlotStatistics
