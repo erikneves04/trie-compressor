@@ -1,8 +1,10 @@
 import argparse
 from enum import Enum
 from FileManager.FileManager import FileManager
+from LZW import PlotStatistics
 from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
+from LZW.PlotStatistics import PlotStatistics
 import cProfile
 import subprocess
 import os
@@ -45,17 +47,17 @@ def parseArgs():
 
     return parser.parse_args()
 
-def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
+def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic, enableStatistics):
     content = FileManager.ReadFile(origin)
     
-    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic, enableStatistics)
     compressedContent = compressor.Compress(content)
     
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
-def ExecuteDecompressOperation(origin, destiny):
+def ExecuteDecompressOperation(origin, destiny, enableStatistics):
     raw_content = FileManager.ReadBinaryFile(origin)
-    maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
+    maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS, enableStatistics)
 
     decompressor = LZWDecompressor(SIGMA_SIZE)
     decompressedContent = decompressor.Decompress(maxBitsUsed, content)
@@ -66,15 +68,21 @@ def main():
     args = parseArgs()
 
     if args.operation == Operation.COMPRESS_FIXED:
-        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False,)
+        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False, enableStatistics=args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotCompression()
 
     elif args.operation == Operation.COMPRESS_DYNAMIC:
         maxCodeLenght = DEFAULT_BITS if args.max_code_bits == None else args.max_code_bits
-        ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True)
-
+        ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True, enableStatistics=args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotCompression()
+        
     elif args.operation == Operation.DECOMPRESS:
-        ExecuteDecompressOperation(args.origin, args.destiny)
-
+        ExecuteDecompressOperation(args.origin, args.destiny, args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotDecompression()
+    
     else:
         print("Invalid operation selected.")
         exit(1)
