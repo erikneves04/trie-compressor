@@ -39,7 +39,7 @@ def parseArgs():
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
     parser.add_argument('--operation', type=Operation, choices=list(Operation), required=True, help='Seleção da operação de compressão ou descompressão.')
-    parser.add_argument('--analysis', type=AnalysisType, choices=list(AnalysisType), required=False, default= AnalysisType.NONE, help='Seleção da operação de compressão ou descompressão.')
+    parser.add_argument('--analysis', type=AnalysisType, choices=list(AnalysisType), required=False, default= AnalysisType.NONE, help='Seleção do método de análise.')
     parser.add_argument('--statistics', type=bool, required=False, default=False, help='Habilita a geração de estatísticas na compressão e descompresão.')
     parser.add_argument('--origin', type=str, required=True, help='Arquivo de origem.')
     parser.add_argument('--destiny', type=str, required=True, help='Arquivo de destino.')
