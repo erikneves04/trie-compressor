@@ -6,6 +6,8 @@ from LZW.Decompressor import LZWDecompressor
 import cProfile
 import subprocess
 import os
+import memray
+from memray import FileDestination
 
 # Constantes
 SIGMA_SIZE = 256                # Tamanho do alfabeto utilizado
@@ -27,12 +29,13 @@ def parseArgs():
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
     parser.add_argument('--operation', type=Operation, choices=list(Operation), required=True, help='Seleção da operação de compressão ou descompressão.')
-    parser.add_argument('--analyze', type=bool, required=False, default=False, help='Ativa o profiling com cProfile (True ou False).')
+    parser.add_argument('--analyze-performance', type=bool, required=False, default=False, help='Ativa o profiling com cProfile (True ou False).')
+    parser.add_argument('--analyze-memory', type=bool, required=False, default=False, help='Ativa o profiling com memray (True ou False).')
     parser.add_argument('--origin', type=str, required=True, help='Arquivo de origem.')
     parser.add_argument('--destiny', type=str, required=True, help='Arquivo de destino.')
-    
-    
+
     return parser.parse_args()
+
 
 def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
     content = FileManager.ReadFile(origin)
@@ -71,14 +74,12 @@ def main():
 if __name__ == "__main__":
     args = parseArgs()
     
-    if args.analyze:
-        # Caminho para a pasta "Analysis" no mesmo nível da pasta "src"
+    if args.analyze_performance:
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
-        # Verifica se a pasta "Analysis" existe, se não, cria
         if not os.path.exists(analysis_folder):
             os.makedirs(analysis_folder)
-
+        
         # Caminho completo para o arquivo de saída do cProfile
         profile_output_file = os.path.join(analysis_folder, "profiling_result.prof")
         
@@ -87,6 +88,21 @@ if __name__ == "__main__":
         
         # Executa o script de análise do perfil, que também estará na pasta "Analysis"
         subprocess.run(["python3", os.path.join(analysis_folder, "analyze_profile.py")])
+    elif args.analyze_memory:
+        # Caminho para a pasta "Analysis" no mesmo nível da pasta "src"
+        analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
+
+        # Verifica se a pasta "Analysis" existe, se não, cria
+        if not os.path.exists(analysis_folder):
+            os.makedirs(analysis_folder)
+            
+        memray_output_file = os.path.join(analysis_folder, "memray_output.bin")
+        if os.path.exists(memray_output_file):
+            os.remove(memray_output_file)
+        with memray.Tracker(destination=FileDestination(memray_output_file)) as tracker:
+            # Executa a lógica principal do código com profiling de memória
+            main()
+
 
     else:
         main()
