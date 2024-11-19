@@ -1,0 +1,67 @@
+10 Funções mais demoradas (tempo acumulado):
+Tue Nov 19 20:08:52 2024    /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/Analysis/profiling_result.prof
+
+         2237581702 function calls in 1561.626 seconds
+
+   Ordered by: cumulative time
+   List reduced from 147 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002 1561.625 1561.625 {built-in method builtins.exec}
+        1    0.001    0.001 1561.623 1561.623 <string>:1(<module>)
+        1    0.015    0.015 1561.622 1561.622 main.py:65(main)
+        1    0.210    0.210 1561.606 1561.606 main.py:48(ExecuteCompressOperation)
+        1  159.953  159.953 1547.491 1547.491 Compressor.py:24(Compress)
+ 70803211   27.172    0.000  825.465    0.000 Trie.py:238(__getitem__)
+ 70803211  779.314    0.000  798.293    0.000 Trie.py:150(Search)
+176950775  115.710    0.000  476.494    0.000 {method 'join' of 'str' objects}
+ 58983761   34.115    0.000  456.634    0.000 BinaryConversor.py:14(ConvertPrefixToBinaryString)
+398240884  168.707    0.000  353.335    0.000 BinaryConversor.py:16(<genexpr>)
+
+
+
+10 Funções mais demoradas (tempo total):
+Tue Nov 19 20:08:52 2024    /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/Analysis/profiling_result.prof
+
+         2237581702 function calls in 1561.626 seconds
+
+   Ordered by: internal time
+   List reduced from 147 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+ 70803211  779.314    0.000  798.293    0.000 Trie.py:150(Search)
+398240884  168.707    0.000  353.335    0.000 BinaryConversor.py:16(<genexpr>)
+        1  159.953  159.953 1547.491 1547.491 Compressor.py:24(Compress)
+404150482  125.513    0.000  184.834    0.000 BinaryConversor.py:10(ConvertIntegerToBinaryString)
+176950775  115.710    0.000  476.494    0.000 {method 'join' of 'str' objects}
+405613565   56.065    0.000   56.065    0.000 {built-in method builtins.bin}
+398240627   39.046    0.000   39.046    0.000 {built-in method builtins.ord}
+ 58983761   34.115    0.000  456.634    0.000 BinaryConversor.py:14(ConvertPrefixToBinaryString)
+ 70803211   27.172    0.000  825.465    0.000 Trie.py:238(__getitem__)
+ 70807306   10.686    0.000   10.686    0.000 Trie.py:55(GetDetailedReturn)
+
+
+
+10 Funções mais chamadas:
+Tue Nov 19 20:08:52 2024    /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/Analysis/profiling_result.prof
+
+         2237581702 function calls in 1561.626 seconds
+
+   Ordered by: call count
+   List reduced from 147 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+405613565   56.065    0.000   56.065    0.000 {built-in method builtins.bin}
+404150482  125.513    0.000  184.834    0.000 BinaryConversor.py:10(ConvertIntegerToBinaryString)
+398240884  168.707    0.000  353.335    0.000 BinaryConversor.py:16(<genexpr>)
+398240627   39.046    0.000   39.046    0.000 {built-in method builtins.ord}
+176950775  115.710    0.000  476.494    0.000 {method 'join' of 'str' objects}
+ 70816867    8.296    0.000    8.296    0.000 {built-in method builtins.len}
+ 70807306   10.686    0.000   10.686    0.000 Trie.py:55(GetDetailedReturn)
+ 70803211  779.314    0.000  798.293    0.000 Trie.py:150(Search)
+ 70803211   27.172    0.000  825.465    0.000 Trie.py:238(__getitem__)
+ 58983761   34.115    0.000  456.634    0.000 BinaryConversor.py:14(ConvertPrefixToBinaryString)
+
+
+
+Tempo total de execução do programa: 1561.625716 segundos
