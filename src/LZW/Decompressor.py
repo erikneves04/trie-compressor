@@ -1,8 +1,11 @@
+import time
+
+import pandas as pd
 from BinaryConversor.BinaryConversor import BinaryConversor
 from Trie.Trie import Trie
 
 class LZWDecompressor:
-    def __init__(self, sigmaSize):
+    def __init__(self, sigmaSize, enableStatistics=True):
         self.dict = Trie()
         self.sigmaSize = sigmaSize
 
@@ -10,6 +13,10 @@ class LZWDecompressor:
         for index in range(sigmaSize):
             bin_key = BinaryConversor.ConvertPrefixToBinaryString(chr(index))
             self.dict[bin_key] = chr(index)
+
+        self.enableStatistics = enableStatistics
+        self.statistics = []
+        self.startTime = time.time()
 
     def Decompress(self, code_length, content):
         decompressedList = []
@@ -50,8 +57,40 @@ class LZWDecompressor:
 
                 self.dict[BinaryConversor.ConvertIntegerToBinaryString(biggestCode)] = currentString
                 biggestCode += 1
+            
+            self.__registerStatistics(content, decompressedList, index, code_length)
+        
+        self.__saveStatistics()
 
         return ''.join(decompressedList)
+
+    def __saveStatistics(self):
+        if self.enableStatistics:
+            df = pd.DataFrame(self.statistics)
+            df.to_csv('decompressed-statistics.csv', index=False)
+
+    def __registerStatistics(self, compressedList, decompressedList, currentIndex, codeBits, last=False):
+        if not self.enableStatistics:
+            return
+
+        if (not last) and not (len(decompressedList) * codeBits % (len(compressedList) // 128) == 0):
+            return
+
+        decompressedSize = len(decompressedList)
+        decompressionRate = (decompressedSize*8 / len(compressedList)) * 100
+
+        progress = ((currentIndex) / len(compressedList)) * 100 if len(compressedList) > 0 else 0
+        timeElapsed = time.time() - self.startTime
+        dictSize = self.dict.GetNodeCount()
+
+        self.statistics.append(
+            {
+                'Progress (%)': progress,
+                'Compression Rate (%)': decompressionRate,
+                'Dictionary Size (elements)': dictSize,
+                'Time Elapsed (seconds)': timeElapsed
+            }
+        )
 
     def __getNextCode(self, content, index, code_length):
         code_bits = content[index:index + code_length]
