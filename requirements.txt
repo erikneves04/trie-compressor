@@ -3,5 +3,4 @@ argparse
 seaborn
 pandas
 pympler
-cProfile
 memray
