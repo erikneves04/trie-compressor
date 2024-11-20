@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 class PlotStatistics:
     @staticmethod
     def GenerateSideBySideForLabel(label, title):
+        """
+        Gera gráficos lado a lado a partir dos dados de estatísticas de compressão ou descompressão.
+
+        :param label: Nome do arquivo de estatísticas (sem a extensão), utilizado para gerar o gráfico.
+        :param title: Título a ser atribuído ao gráfico.
+        """
+
         df = pd.read_csv(f'{label}-statistics.csv')
         sns.set(style="whitegrid", palette="muted")
         fig, axes = plt.subplots(1, 2, figsize=(18, 6))
@@ -28,8 +35,14 @@ class PlotStatistics:
 
     @staticmethod
     def PlotCompression():
+        """
+        Gera e salva o gráfico de estatísticas coletadas durante a compressão.
+        """
         PlotStatistics.GenerateSideBySideForLabel('compressed', 'Métricas Coletadas Durante a Compressão')
 
     @staticmethod
     def PlotDecompression():
+        """
+        Gera e salva o gráfico de estatísticas coletadas durante a descompressão.
+        """
         PlotStatistics.GenerateSideBySideForLabel('decompressed', 'Métricas Coletadas Durante a Descompressão')
