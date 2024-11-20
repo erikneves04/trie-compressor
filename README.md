@@ -1,18 +1,15 @@
-# trie-compressor
+# Manipulação de Sequências - Método LZW
 
-### Usando o pytest:
+### Descrição
+Este repositório contém a implementação e análise do método de compressão de arquivos LZW. O foco principal é a implementação da estrutura de dados **Trie Compacta** e a sua utilização como o dicionário para o método LZW, formalizando assim o algoritmo LZW.
 
-Para rodar todos os testes basta executar pytest -v -s que será exibido todos os testes.
+### Conteúdo
+- **Algoritmos de Compressão e Descompressão:** Implementação de algoritmos para comprimir e descomprimir arquivos.
+- **Algoritmo de Implementação da Trie Compacta:** Estrutura de dados com todas as operações suportadas, integrada aos algoritmos de compressão e descompressão.
+- **Testes:** Testes de software para garantir a corretude do código.
+- **Resultados de Análises Experimentais:** Arquivos `.txt`, `.zip`, e tabelas/documentos detalhando os experimentos realizados.
+- **Documentação:** Documentação detalhada das etapas, escolhas de implementação e resultados dos experimentos.
 
-Para rodar um teste específico, basta executar pytest -v -s nome_do_teste.
-
-Para exibir o coverage do teste, basta executar pytest --cov --cov-report=term-missing --cov-report=html --cov-config=.coveragerc
-
-
-### Usando o memray:
-
-Para gerar um sumário no terminal, navegue até a pasta "Analysis" e execute memray summary memray_output.bin.
-
-Para gerar estatístiscas de uso de memória no terminal navegue até a pasta "Analysis" e execute memray stats memray_output.bin
-
-Para gerar um flamegraph, navegue até "Analysis" e execute: memray flamegraph memray_output.bin
+#### Integrantes:
+- **Gabriel Campos Prudente**  
+- **Erik Roberto Reis Neves**
