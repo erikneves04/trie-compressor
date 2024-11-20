@@ -27,7 +27,7 @@ class Operation(Enum):
 # Análise de memória
 class AnalysisType(Enum):
     NONE = "None"
-    CPROGILE = "cProfile"
+    CPROFILE = "cProfile"
     MEMRAY = "memray"
 
     def __str__(self):
@@ -82,25 +82,21 @@ def main():
 if __name__ == "__main__":
     args = parseArgs()
     
-    if args.analysis == AnalysisType.CPROGILE:
+    if args.analysis == AnalysisType.CPROFILE:
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
         if not os.path.exists(analysis_folder):
             os.makedirs(analysis_folder)
         
-        # Caminho completo para o arquivo de saída do cProfile
         profile_output_file = os.path.join(analysis_folder, "profiling_result.prof")
         
-        # Executa o perfil e salva na pasta "Analysis"
         cProfile.run('main()', profile_output_file)
         
-        # Executa o script de análise do perfil, que também estará na pasta "Analysis"
         subprocess.run(["python3", os.path.join(analysis_folder, "analyze_profile.py")])
+        
     elif args.analysis == AnalysisType.MEMRAY:
-        # Caminho para a pasta "Analysis" no mesmo nível da pasta "src"
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
-        # Verifica se a pasta "Analysis" existe, se não, cria
         if not os.path.exists(analysis_folder):
             os.makedirs(analysis_folder)
             
@@ -108,7 +104,6 @@ if __name__ == "__main__":
         if os.path.exists(memray_output_file):
             os.remove(memray_output_file)
         with memray.Tracker(destination=FileDestination(memray_output_file)) as tracker:
-            # Executa a lógica principal do código com profiling de memória
             main()
 
     else:
