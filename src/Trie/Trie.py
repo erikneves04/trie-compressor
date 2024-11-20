@@ -5,6 +5,13 @@ SIGMA_SIZE = 2
 IS_WORD_FULL = "$"
 class _trieNode:
     def __init__(self, previous, substring="", value=None):
+        """
+        Inicializa um nó com uma lista de filhos e um valor associado.
+        
+        :param previous: Nó anterior no caminho da árvore Trie.
+        :param substring: Substring associada ao nó.
+        :param value: Valor armazenado no nó, se for uma folha (None se não for).
+        """
         self.children = [None] * (SIGMA_SIZE + 1)
         self.substring = substring
         self.lenSubstring = len(substring)
@@ -13,26 +20,52 @@ class _trieNode:
         self._isLeaf = (value is not None)
 
     def IsLeaf(self):
+        """
+        Verifica se o nó é uma folha (ou seja, contém um valor).
+
+        :return: True se o nó for uma folha, False caso contrário.
+        """
         return self._isLeaf
 
     def GetValue(self):
+        """
+        Retorna o valor armazenado no nó.
+
+        :return: O valor armazenado no nó ou None se não houver valor.
+        """
         return self._value
 
     def SetValue(self, value):
+        """
+        Define o valor armazenado no nó e atualiza seu estado para folha se o novo valor 
+        não for None.
+
+        :param value: O valor a ser armazenado no nó.
+        """
         self._value = value
         self._isLeaf = True if value is not None else False
 
     def SetSubstring(self, value):
+        """
+        Define o substring do nó e ajusta sua condição de folha.
+
+        :param value: O substring a ser associado ao nó.
+        """
         self.substring = value
         self.lenSubstring = len(value)
         self._isLeaf = False if value is None else True
 
     def GetSubstring(self):
+        """
+        Retorna o substring associado ao nó.
+
+        :return: O substring armazenado no nó.
+        """
         return self.substring
     
     def MemoryUsage(self, detailed=False):
         """
-        Retorna o uso de memória do nó atual.
+        Retorna o uso de memória de um nó.
 
         :param detailed: Se True, usa 'asizeof' para incluir referências indiretas.
         :return: Memória usada em bytes.
@@ -44,18 +77,40 @@ class _trieNode:
 
 class Trie:
     def __init__(self, detailedReturn = False):
+        """
+        Inicializa a árvore Trie com a raiz e parâmetros de controle.
+
+        :param detailedReturn: Por padrão é falso. Define o tipo de retorno do método.
+        """
         self.root = _trieNode(None)
         self._depth = 1
         self._nodeCount = 1
         self.detailedReturn = detailedReturn  
         
     def SetDetailedReturn(self, value):
+        """
+        Define se o retorno será detalhado para inserções e buscas.
+
+        :param value: Booleano indicando se o retorno deve ser detalhado.
+        """
         self.detailedReturn = value
         
     def GetDetailedReturn(self):
+        """
+        Retorna o valor atual da configuração de retorno detalhado.
+
+        :return: True se o retorno for detalhado, False caso contrário.
+        """
         return self.detailedReturn
 
-    def Insert(self, key, value):       
+    def Insert(self, key, value):  
+        """
+        Insere uma chave associada a um valor na árvore Trie.
+
+        :param key: A chave a ser inserida (uma sequência binária de 0s e 1s).
+        :param value: O valor a ser associado à chave.
+        :return: Detalhes do processo de inserção ou o par (key, value) se 'detailedReturn' for False.
+        """     
         detailedReturn = self.GetDetailedReturn()
         
         currentNode = self.root
@@ -148,6 +203,12 @@ class Trie:
         return (key, value) if not detailedReturn else (key, currentNode.GetSubstring(), None, value)
 
     def Search(self, key):
+        """
+        Busca por uma chave na árvore Trie.
+
+        :param key: A chave a ser buscada.
+        :return: O valor associado à chave ou None se não for encontrada.
+        """
         detailedReturn = self.GetDetailedReturn()
         currentNode = self.root
         i = 0
@@ -178,9 +239,22 @@ class Trie:
         return (key, suffix, currentNode._value, currentNode) if detailedReturn else currentNode._value
     
     def ContainsKey(self, key):
+        """
+        Verifica se uma chave está presente na árvore Trie.
+
+        :param key: A chave a ser verificada.
+        :return: True se a chave estiver presente, False caso contrário.
+        """
         return self.Search(key) != None
 
     def Remove(self, key):
+        """
+        Remove uma chave da árvore Trie.
+
+        :param key: A chave a ser removida.
+        :return: True se a remoção for bem-sucedida, False se a chave não for encontrada.
+        :raises: Retorna um conjunto detalhado de informações sobre a remoção se `detailedReturn` for True.
+        """
         self.SetDetailedReturn(True)
 
         search_result = self.Search(key)
@@ -236,12 +310,29 @@ class Trie:
         return (key, parentNode.GetSubstring(), value) if self.detailedReturn else True                    
 
     def __getitem__(self, key):
+        """
+        Obtém o valor associado a uma chave na árvore Trie.
+
+        :param key: A chave a ser buscada.
+        :return: O valor associado à chave, ou levanta uma exceção KeyError se a chave não for encontrada.
+        """
         return self.Search(key)
 
     def __setitem__(self, key, value):
+        """
+        Insere ou atualiza uma chave na árvore Trie com um valor.
+
+        :param key: A chave a ser inserida ou atualizada.
+        :param value: O valor a ser associado à chave.
+        """
         self.Insert(key, value)
 
     def GetNodeCount(self):
+        """
+        Retorna o número total de nós na árvore Trie.
+
+        :return: O número total de nós na árvore Trie.
+        """
         return self._nodeCount
 
     def GetDepth(self):

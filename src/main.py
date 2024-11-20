@@ -17,6 +17,13 @@ CODE_CONTROL_BITS = 32          # Tamanho da código de controle incluido no com
 
 # Operações disponíveis
 class Operation(Enum):
+    """
+    Enumeração de operações disponíveis para compressão e descompressão.
+
+    COMPRESS_FIXED: Compressão com um número fixo de bits.
+    COMPRESS_DYNAMIC: Compressão com um número dinâmico de bits.
+    DECOMPRESS: Descompressão.
+    """
     COMPRESS_FIXED = "compress-fixed"
     COMPRESS_DYNAMIC = "compress-dynamic"
     DECOMPRESS = "decompress"
@@ -26,6 +33,13 @@ class Operation(Enum):
 
 # Análise de memória
 class AnalysisType(Enum):
+    """
+    Enumeração para definir o tipo de análise de desempenho a ser realizada.
+
+    NONE: Nenhuma análise de desempenho.
+    CPROGILE: Análise utilizando cProfile.
+    MEMRAY: Análise utilizando Memray.
+    """
     NONE = "None"
     CPROGILE = "cProfile"
     MEMRAY = "memray"
@@ -34,6 +48,11 @@ class AnalysisType(Enum):
         return self.value
 
 def parseArgs():
+    """
+    Função para fazer o parsing dos argumentos da linha de comando.
+
+    :return: Retorna um objeto com os argumentos parseados.
+    """
     parser = argparse.ArgumentParser(description="Aplicação para compressão e descompressão de arquivos - LZW")
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
@@ -46,6 +65,15 @@ def parseArgs():
     return parser.parse_args()
 
 def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
+    """
+    Função responsável por executar a compressão de um arquivo.
+
+    :param origin: Caminho do arquivo de origem a ser comprimido.
+    :param destiny: Caminho do arquivo de destino para armazenar o conteúdo comprimido.
+    :param initialCodeLengh: Comprimento inicial do código a ser usado para compressão.
+    :param maxCodeLenght: Comprimento máximo dos códigos para a compressão.
+    :param dynamic: Se a compressão será feita com tamanho de código dinâmico (True) ou fixo (False).
+    """
     content = FileManager.ReadFile(origin)
     
     compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
@@ -54,6 +82,12 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
 def ExecuteDecompressOperation(origin, destiny):
+    """
+    Função responsável por executar a descompressão de um arquivo.
+
+    :param origin: Caminho do arquivo de origem a ser descomprimido.
+    :param destiny: Caminho do arquivo de destino para armazenar o conteúdo descomprimido.
+    """
     raw_content = FileManager.ReadBinaryFile(origin)
     maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
 
@@ -63,6 +97,12 @@ def ExecuteDecompressOperation(origin, destiny):
     FileManager.SaveTextFile(destiny, decompressedContent)
 
 def main():
+    """
+    Função principal do programa. Executa a operação selecionada (compressão ou descompressão) com base nos argumentos fornecidos.
+
+    - Compressão: Executa a compressão de arquivos com o número fixo ou dinâmico de bits.
+    - Descompressão: Executa a descompressão de arquivos.
+    """
     args = parseArgs()
 
     if args.operation == Operation.COMPRESS_FIXED:
