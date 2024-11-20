@@ -1,0 +1,84 @@
+📏 Total allocations:
+        3719
+
+📦 Total memory allocated:
+        4.653GB
+
+📊 Histogram of allocation size:
+        min: 1.000B
+        -------------------------------------------
+        < 6.000B   :    8 ▇
+        < 37.000B  :    2 ▇
+        < 234.000B :   24 ▇
+        < 1.409KB  :   39 ▇
+        < 8.690KB  :   47 ▇
+        < 53.569KB :   48 ▇
+        < 330.210KB:   47 ▇
+        < 1.988MB  : 3429 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        < 12.253MB :   44 ▇
+        <=75.527MB :   31 ▇
+        -------------------------------------------
+        max: 75.527MB
+
+📂 Allocator type distribution:
+         MMAP: 3381
+         REALLOC: 277
+         MALLOC: 59
+         CALLOC: 2
+
+🥇 Top 5 largest allocating locations (by size):
+        - __init__: 1.538GB
+        - ReadBinaryFile: 747.340MB
+        - <genexpr>: 549.091MB
+        - ConvertIntegerToBinaryString:inaryConversor.py: 489.000MB
+        - Decompress:py: 424.325MB
+
+🥇 Top 5 largest allocating locations (by number of allocations):
+        - __init__:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/Trie/Trie.py:8 -> 1576
+        - <genexpr>:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/FileManager/FileManager.py:43 -> 554
+        - ConvertIntegerToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.py:12 -> 489
+        - Decompress:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Decompressor.py:48 -> 309
+        - Insert:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/Trie/Trie.py:139 -> 261
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃                                                             ┃     <Total ┃      Total ┃            ┃ Own Memory ┃ Allocation ┃
+┃ Location                                                    ┃    Memory> ┃   Memory % ┃ Own Memory ┃          % ┃      Count ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ ExecuteDecompressOperation at                               │    3.000GB │    100.00% │   536.000B │      0.00% │       2840 │
+│ /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período    │            │            │            │            │            │
+│ 5/ALG 2/TP1/trie-compressor/src/main.py                     │            │            │            │            │            │
+│ main at /mnt/c/Users/gabri/Gabriel/Área de                  │    3.000GB │    100.00% │     0.000B │      0.00% │       2840 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/main.py                           │            │            │            │            │            │
+│ <module> at /mnt/c/Users/gabri/Gabriel/Área de              │    3.000GB │    100.00% │     0.000B │      0.00% │       2840 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/main.py                           │            │            │            │            │            │
+│ Decompress at /mnt/c/Users/gabri/Gabriel/Área de            │    2.867GB │     95.56% │  412.403MB │     13.43% │       2836 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/LZW/Decompressor.py               │            │            │            │            │            │
+│ Insert at /mnt/c/Users/gabri/Gabriel/Área de                │    1.924GB │     64.14% │  395.188MB │     12.86% │       1971 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/Trie/Trie.py                      │            │            │            │            │            │
+│ __setitem__ at /mnt/c/Users/gabri/Gabriel/Área de           │    1.924GB │     64.14% │     0.000B │      0.00% │       1971 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/Trie/Trie.py                      │            │            │            │            │            │
+│ __init__ at /mnt/c/Users/gabri/Gabriel/Área de              │    1.538GB │     51.27% │    1.538GB │     51.27% │       1575 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/Trie/Trie.py                      │            │            │            │            │            │
+│ ConvertIntegerToBinaryString at                             │  489.000MB │     15.92% │  489.000MB │     15.92% │        489 │
+│ /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período    │            │            │            │            │            │
+│ 5/ALG                                                       │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.… │            │            │            │            │            │
+│ ReadBinaryFile at /mnt/c/Users/gabri/Gabriel/Área de        │   68.633MB │      2.23% │   67.633MB │      2.20% │          2 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/FileManager/FileManager.py        │            │            │            │            │            │
+│ ExtractCodeLenghtAndContent at                              │   67.633MB │      2.20% │   67.633MB │      2.20% │          1 │
+│ /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período    │            │            │            │            │            │
+│ 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py           │            │            │            │            │            │
+│ __getNextCode at /mnt/c/Users/gabri/Gabriel/Área de         │   64.000MB │      2.08% │   64.000MB │      2.08% │         64 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/LZW/Decompressor.py               │            │            │            │            │            │
+│ <genexpr> at /mnt/c/Users/gabri/Gabriel/Área de             │    1.000MB │      0.03% │    1.000MB │      0.03% │          1 │
+│ Trabalho/UFMG/Período 5/ALG                                 │            │            │            │            │            │
+│ 2/TP1/trie-compressor/src/FileManager/FileManager.py        │            │            │            │            │            │
+└─────────────────────────────────────────────────────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘

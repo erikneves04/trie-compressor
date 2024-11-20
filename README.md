@@ -6,7 +6,7 @@ Para rodar todos os testes basta executar pytest -v -s que será exibido todos o
 
 Para rodar um teste específico, basta executar pytest -v -s nome_do_teste.
 
-Para exibir o coverage do teste, basta executar pytest --cov --cov-report=term-missing --cov-report=html
+Para exibir o coverage do teste, basta executar pytest --cov --cov-report=term-missing --cov-report=html --cov-config=.coveragerc
 
 
 ### Usando o memray:
