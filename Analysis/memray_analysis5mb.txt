@@ -1,0 +1,68 @@
+📏 Total allocations:
+        415
+
+📦 Total memory allocated:
+        444.138MB
+
+📊 Histogram of allocation size:
+        min: 1.000B
+        ------------------------------------------
+        < 5.000B   :   9 ▇▇
+        < 29.000B  :   0
+        < 158.000B :  26 ▇▇▇▇▇
+        < 855.000B :  14 ▇▇▇
+        < 4.516KB  :  52 ▇▇▇▇▇▇▇▇▇
+        < 24.424KB :  44 ▇▇▇▇▇▇▇▇
+        < 132.078KB:  43 ▇▇▇▇▇▇▇▇
+        < 714.254KB:  44 ▇▇▇▇▇▇▇▇
+        < 3.772MB  : 153 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+        <=20.398MB :  30 ▇▇▇▇▇
+        ------------------------------------------
+        max: 20.398MB
+
+📂 Allocator type distribution:
+         REALLOC: 240
+         MMAP: 113
+         MALLOC: 60
+         CALLOC: 2
+
+🥇 Top 5 largest allocating locations (by size):
+        - __convertCodesToBinaryString: 130.647MB
+        - Compress: 30.647MB
+        - ConvertIntegerToBinaryString: 111.021MB
+        - SaveBinaryFile:24.617MB
+        - __convertCodesToBinaryString: 20.398MB
+
+🥇 Top 5 largest allocating locations (by number of allocations):
+        - ConvertIntegerToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.py:12 -> 114
+        - __convertCodesToBinaryString:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:112 -> 83
+        - Compress:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py:49 -> 83
+        - SaveBinaryFile:/mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/FileManager/FileManager.py:33 -> 73
+        - exists:/usr/lib/python3.10/genericpath.py:19 -> 24
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃                                                                                         ┃                  ┃┃                  ┃                 ┃      Allocation ┃
+┃ Location                                                                                ┃   <Total Memory> ┃   Total Memory % ┃       Own Memory ┃    Own Memory % ┃           Count ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ Compress at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG              │        162.452MB │           97.05% │         14.520MB │           8.67% │             119 │
+│ 2/TP1/trie-compressor/src/LZW/Compressor.py                                             │                  │                  │                  │                 │                 │
+│ ExecuteCompressOperation at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período    │        162.452MB │           97.05% │           0.000B │           0.00% │             119 │
+│ 5/ALG 2/TP1/trie-compressor/src/main.py                                                 │                  │                  │                  │                 │                 │
+│ main at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG                  │        162.452MB │           97.05% │           0.000B │           0.00% │             119 │
+│ 2/TP1/trie-compressor/src/main.py                                                       │                  │                  │                  │                 │                 │
+│ <module> at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG              │        162.452MB │           97.05% │           0.000B │           0.00% │             119 │
+│ 2/TP1/trie-compressor/src/main.py                                                       │                  │                  │                  │                 │                 │
+│ __convertCodesToBinaryString at /mnt/c/Users/gabri/Gabriel/Área de                      │        145.930MB │           87.18% │         34.918MB │          20.86% │             114 │
+│ Trabalho/UFMG/Período 5/ALG 2/TP1/trie-compressor/src/LZW/Compressor.py                 │                  │                  │                  │                 │                 │
+│ ConvertIntegerToBinaryString at /mnt/c/Users/gabri/Gabriel/Área de                      │        111.012MB │           66.32% │        111.012MB │          66.32% │             112 │
+│ Trabalho/UFMG/Período 5/ALG                                                             │                  │                  │                  │                 │                 │
+│ 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.py                            │                  │                  │                  │                 │                 │
+│ Insert at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG                │          1.002MB │            0.60% │          1.002MB │           0.60% │               3 │
+│ 2/TP1/trie-compressor/src/Trie/Trie.py                                                  │                  │                  │                  │                 │                 │
+│ __setitem__ at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG           │          1.002MB │            0.60% │           0.000B │           0.00% │               3 │
+│ 2/TP1/trie-compressor/src/Trie/Trie.py                                                  │                  │                  │                  │                 │                 │
+│ __insertNewCode at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período 5/ALG       │          1.002MB │            0.60% │           0.000B │           0.00% │               3 │
+│ 2/TP1/trie-compressor/src/LZW/Compressor.py                                             │                  │                  │                  │                 │                 │
+│ ConvertPrefixToBinaryString at /mnt/c/Users/gabri/Gabriel/Área de Trabalho/UFMG/Período │          1.000MB │            0.60% │          1.000MB │           0.60% │               1 │
+│ 5/ALG 2/TP1/trie-compressor/src/BinaryConversor/BinaryConversor.py                      │                  │                  │                  │                 │                 │
+└─────────────────────────────────────────────────────────────────────────────────────────┴──────────────────┴──────────────────┴──────────────────┴─────────────────┴─────────────────┘
