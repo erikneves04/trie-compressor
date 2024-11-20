@@ -5,7 +5,19 @@ from BinaryConversor.BinaryConversor import BinaryConversor
 from Trie.Trie import Trie
 
 class LZWDecompressor:
+    """
+    Classe responsável pela descompressão de dados utilizando o algoritmo LZW (Lempel-Ziv-Welch).
+
+    """
+
     def __init__(self, sigmaSize, enableStatistics=False):
+        """
+        Inicializa o descompressor LZW com os parâmetros fornecidos.
+
+        :param sigmaSize: Tamanho do alfabeto.
+        :param enableStatistics: Habilita a coleta de estatísticas.
+        """
+        
         self.dict = Trie()
         self.sigmaSize = sigmaSize
 
@@ -19,6 +31,14 @@ class LZWDecompressor:
         self.startTime = time.time()
 
     def Decompress(self, code_length, content):
+        """
+        Descomprime o conteúdo fornecido utilizando o algoritmo LZW.
+
+        :param code_length: Comprimento do código de cada símbolo comprimido.
+        :param content: Dados comprimidos a serem descomprimidos.
+        :return: String descomprimida.
+        """
+        
         decompressedList = []
 
         biggestCode = self.sigmaSize
@@ -65,11 +85,25 @@ class LZWDecompressor:
         return ''.join(decompressedList)
 
     def __saveStatistics(self):
+        """
+        Salva as estatísticas de descompressão em um arquivo CSV, se habilitado.
+        """
+
         if self.enableStatistics:
             df = pd.DataFrame(self.statistics)
             df.to_csv('decompressed-statistics.csv', index=False)
 
     def __registerStatistics(self, compressedList, decompressedList, currentIndex, codeBits, last=False):
+        """
+        Registra as estatísticas de descompressão em diferentes pontos do processo.
+
+        :param compressedList: Lista de códigos comprimidos.
+        :param decompressedList: Lista de códigos descomprimidos.
+        :param currentIndex: Índice atual do processamento.
+        :param codeBits: Tamanho do código em bits.
+        :param last: Flag para indicar se é o último ponto de descompressão.
+        """
+        
         if not self.enableStatistics:
             return
 
@@ -93,5 +127,14 @@ class LZWDecompressor:
         )
 
     def __getNextCode(self, content, index, code_length):
+        """
+        Extrai o próximo código a partir do conteúdo comprimido.
+
+        :param content: Dados comprimidos.
+        :param index: Índice atual para ler o código.
+        :param code_length: Comprimento do código em bits.
+        :return: O próximo código extraído.
+        """
+        
         code_bits = content[index:index + code_length]
         return code_bits.lstrip('0') or '0'
