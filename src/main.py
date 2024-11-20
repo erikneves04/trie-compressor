@@ -3,6 +3,7 @@ from enum import Enum
 from FileManager.FileManager import FileManager
 from LZW.Compressor import LZWCompressor
 from LZW.Decompressor import LZWDecompressor
+from LZW.PlotStatistics import PlotStatistics
 import cProfile
 import subprocess
 import os
@@ -76,7 +77,7 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     """
     content = FileManager.ReadFile(origin)
     
-    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic)
+    compressor = LZWCompressor(SIGMA_SIZE, CODE_CONTROL_BITS, initialCodeLengh, maxCodeLenght, dynamic, enableStatistics)
     compressedContent = compressor.Compress(content)
     
     FileManager.SaveBinaryFile(destiny, compressedContent)
@@ -91,7 +92,7 @@ def ExecuteDecompressOperation(origin, destiny):
     raw_content = FileManager.ReadBinaryFile(origin)
     maxBitsUsed, content = LZWCompressor.ExtractCodeLenghtAndContent(raw_content, CODE_CONTROL_BITS)
 
-    decompressor = LZWDecompressor(SIGMA_SIZE)
+    decompressor = LZWDecompressor(SIGMA_SIZE, enableStatistics)
     decompressedContent = decompressor.Decompress(maxBitsUsed, content)
 
     FileManager.SaveTextFile(destiny, decompressedContent)
@@ -106,15 +107,21 @@ def main():
     args = parseArgs()
 
     if args.operation == Operation.COMPRESS_FIXED:
-        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False,)
+        ExecuteCompressOperation(args.origin, args.destiny, DEFAULT_BITS, DEFAULT_BITS, dynamic=False, enableStatistics=args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotCompression()
 
     elif args.operation == Operation.COMPRESS_DYNAMIC:
         maxCodeLenght = DEFAULT_BITS if args.max_code_bits == None else args.max_code_bits
-        ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True)
-
+        ExecuteCompressOperation(args.origin, args.destiny, DINAMIC_BIT_SIZE_START_WITH, maxCodeLenght, dynamic=True, enableStatistics=args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotCompression()
+        
     elif args.operation == Operation.DECOMPRESS:
-        ExecuteDecompressOperation(args.origin, args.destiny)
-
+        ExecuteDecompressOperation(args.origin, args.destiny, args.statistics)
+        if args.statistics:
+            PlotStatistics.PlotDecompression()
+    
     else:
         print("Invalid operation selected.")
         exit(1)
@@ -122,7 +129,7 @@ def main():
 if __name__ == "__main__":
     args = parseArgs()
     
-    if args.analysis == AnalysisType.CPROFILE:
+    if args.analysis == AnalysisType.CPROGILE:
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
         if not os.path.exists(analysis_folder):
