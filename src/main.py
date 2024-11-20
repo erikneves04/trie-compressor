@@ -58,14 +58,14 @@ def parseArgs():
 
     parser.add_argument('--max-code-bits', type=int, required=False, help='Número máximo de bits para os códigos usados.')
     parser.add_argument('--operation', type=Operation, choices=list(Operation), required=True, help='Seleção da operação de compressão ou descompressão.')
-    parser.add_argument('--analysis', type=AnalysisType, choices=list(AnalysisType), required=False, default= AnalysisType.NONE, help='Seleção da operação de compressão ou descompressão.')
+    parser.add_argument('--analysis', type=AnalysisType, choices=list(AnalysisType), required=False, default= AnalysisType.NONE, help='Seleção do método de análise.')
     parser.add_argument('--statistics', type=bool, required=False, default=False, help='Habilita a geração de estatísticas na compressão e descompresão.')
     parser.add_argument('--origin', type=str, required=True, help='Arquivo de origem.')
     parser.add_argument('--destiny', type=str, required=True, help='Arquivo de destino.')
 
     return parser.parse_args()
 
-def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic):
+def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, dynamic, enableStatistics):
     """
     Função responsável por executar a compressão de um arquivo.
 
@@ -82,7 +82,7 @@ def ExecuteCompressOperation(origin, destiny, initialCodeLengh, maxCodeLenght, d
     
     FileManager.SaveBinaryFile(destiny, compressedContent)
 
-def ExecuteDecompressOperation(origin, destiny):
+def ExecuteDecompressOperation(origin, destiny, enableStatistics):
     """
     Função responsável por executar a descompressão de um arquivo.
 
@@ -129,7 +129,7 @@ def main():
 if __name__ == "__main__":
     args = parseArgs()
     
-    if args.analysis == AnalysisType.CPROGILE:
+    if args.analysis == AnalysisType.CPROFILE:
         analysis_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Analysis")
 
         if not os.path.exists(analysis_folder):
