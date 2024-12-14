@@ -76,3 +76,46 @@ def test_trie_insert_two_str_bin_with_different_prefixes(trie, first_key, first_
     trie.Insert(first_key, first_value)
     result = trie.Insert(second_key, second_value)
     assert result == expected
+
+@pytest.mark.parametrize(
+    "first_key, first_value, second_key, second_value, expected", 
+    [("00000", 1, "00011", 2, ("00011", "11", "00", 2)),
+     ("101", 1, "100", 2, ("100", "0", "1", 2)),
+     ("110", 1, "111", 2, ("111", "1", "0", 2)),
+     ("0110", 1, "0111", 2, ("0111", "1", "0", 2)),
+     ("1110", 1, "1111", 2, ("1111", "1", "0", 2)),
+     ("00001", 1, "00000", 2, ("00000", "0", "1", 2)),
+])
+def test_trie_insert_two_str_bin_with_common_prefix(trie, first_key, first_value, second_key, second_value, expected):
+    trie.Insert(first_key, first_value)
+    result = trie.Insert(second_key, second_value)
+    assert result == expected
+   
+@pytest.mark.parametrize(
+    "first_key, first_value, second_key, second_value, expected", 
+    [("111", 1, "11101", 2, ("11101", "$", "01", 2)),
+     ("101", 1, "10111", 2, ("10111", "$", "11", 2)),
+     ("110", 1, "11010", 2, ("11010", "$", "10", 2)),
+     ("0110", 1, "011011", 2, ("011011", "$", "11", 2)),
+     ("000", 1, "0001", 2, ("0001", "$", "1", 2)),
+     ("1010", 1, "10101", 2, ("10101", "$", "1", 2)),
+     ("1110", 1, "11101", 2, ("11101", "$", "1", 2)),
+     ("1001", 1, "100111", 2, ("100111", "$", "11", 2))
+])   
+def test_trie_insert_str_bin_into_leaf_node(trie, first_key, first_value, second_key, second_value, expected):
+    trie.Insert(first_key, first_value)
+    result = trie.Insert(second_key, second_value)
+    assert result == expected
+
+def test_trie_insert_random_list_str_bin(trie, list_of_insertion, expected_values_insertion):
+    for (key, value), expected in zip(list_of_insertion, expected_values_insertion):
+        result = trie.Insert(key, value)
+        assert result == expected
+
+    assert trie.GetNodeCount() == 20
+        
+def test_trie_split_intermediate_node_leaf(trie):
+    trie.Insert("111",1)
+    trie.Insert("1110",2)
+    result = trie.Insert("110",3)
+    assert result == ("110", "0", "1", 3) 
